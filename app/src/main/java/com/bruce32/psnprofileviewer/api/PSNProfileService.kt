@@ -21,7 +21,9 @@ class PSNProfileServiceImpl(
 
     private val psnProfileApi = retrofit.create<PSNProfileAPI>()
 
-    override suspend fun profile(userName: String) = scraper.profile(html = psnProfileApi.profile(userName))
+    override suspend fun profile(userName: String) =
+        scraper.profile(html = psnProfileApi.profile(userName))
 
-    override suspend fun game(gameId: String, userName: String) = scraper.game(html = psnProfileApi.game(gameId, userName))
+    override suspend fun game(gameId: String, userName: String) =
+        scraper.game(html = psnProfileApi.game(gameId, userName))
 }

@@ -1,10 +1,10 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -52,11 +52,11 @@ class GameListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { href ->
-                    val elems = href.split("/").filter { it.isNotBlank() }
+                    val components = href.split("/").filter { it.isNotBlank() }
                     findNavController().navigate(
                         GameListFragmentDirections.showTrophyList(
-                            elems[1],
-                            elems[2]
+                            components[1],
+                            components[2]
                         )
                     )
                 }

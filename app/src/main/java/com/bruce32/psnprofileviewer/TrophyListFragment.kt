@@ -1,20 +1,18 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.api.CompleteGame
 import com.bruce32.psnprofileviewer.api.PSNProfileService
 import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
-import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
-
 
 class TrophyListFragment : Fragment() {
 

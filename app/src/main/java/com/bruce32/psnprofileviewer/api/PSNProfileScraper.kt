@@ -4,16 +4,16 @@ import android.util.Log
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.Profile
 import com.bruce32.psnprofileviewer.model.ProfileStats
+import java.net.URL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.net.URL
 
 interface PSNProfileScraper {
     fun profile(html: String): Profile
     fun game(html: String): CompleteGame
 }
 
-class PSNProfileScraperImpl: PSNProfileScraper {
+class PSNProfileScraperImpl : PSNProfileScraper {
 
     override fun profile(html: String): Profile {
         val doc = Jsoup.parse(html)
@@ -84,7 +84,6 @@ class PSNProfileScraperImpl: PSNProfileScraper {
     }
 }
 
-
 private fun parseGame(game: Element): Game {
     val name = game.select("a.title").text()
     val platform = if (game.select("span.tag.platform").size > 1) {
@@ -146,9 +145,9 @@ data class Trophy(
 )
 
 private fun String.toIntOrZero() =
-    this.replace(",","")
+    this.replace(",", "")
         .toIntOrNull() ?: 0
 
 private fun String.toDoubleOrZero() =
-    this.replace(",","")
+    this.replace(",", "")
         .toDoubleOrNull() ?: 0.0
