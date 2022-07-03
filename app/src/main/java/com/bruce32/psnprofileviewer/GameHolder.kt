@@ -3,12 +3,9 @@ package com.bruce32.psnprofileviewer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.ListItemGameBinding
 import com.bruce32.psnprofileviewer.model.Game
 import com.bumptech.glide.Glide
-import java.net.URL
 
 class GameHolder(
     val binding: ListItemGameBinding
