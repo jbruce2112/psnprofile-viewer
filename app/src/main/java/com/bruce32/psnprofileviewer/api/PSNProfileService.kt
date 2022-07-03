@@ -12,7 +12,7 @@ interface PSNProfileService {
 
 class PSNProfileServiceImpl(
     private val scraper: PSNProfileScraper = PSNProfileScraperImpl()
-): PSNProfileService {
+) : PSNProfileService {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://psnprofiles.com/")
