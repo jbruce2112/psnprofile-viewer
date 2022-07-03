@@ -26,7 +26,7 @@ class GameListFragment : Fragment() {
         }
 
     private val adapter
-        get() = binding.root.adapter as? GameListAdapter
+        get() = binding.root.adapter as GameListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +40,7 @@ class GameListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             val profile = service.profile("jbruce2112")
-            adapter?.update(profile.games)
+            adapter.update(profile.games)
         }
 
         return binding.root
