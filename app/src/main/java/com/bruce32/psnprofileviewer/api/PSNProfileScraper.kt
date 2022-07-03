@@ -1,5 +1,6 @@
 package com.bruce32.psnprofileviewer.api
 
+import android.util.Log
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.Profile
 import com.bruce32.psnprofileviewer.model.ProfileStats
@@ -9,6 +10,7 @@ import java.net.URL
 
 interface PSNProfileScraper {
     fun profile(html: String): Profile
+    fun game(html: String): CompleteGame
 }
 
 class PSNProfileScraperImpl: PSNProfileScraper {
@@ -55,6 +57,29 @@ class PSNProfileScraperImpl: PSNProfileScraper {
             totalBronze = totalBronze.toIntOrZero(),
             games = games,
             stats = profileStats
+        )
+    }
+
+    override fun game(html: String): CompleteGame {
+        val doc = Jsoup.parse(html)
+
+        val trophiesRows = doc.select("[id=\"content\"] table.zebra tr")
+        val trophies = trophiesRows.mapNotNull { parseTrophy(it) }
+        return CompleteGame(
+            trophies = trophies
+        )
+    }
+
+    private fun parseTrophy(row: Element): Trophy? {
+        Log.d("Parse", "going to parse row $row")
+        val titleData = row.select("td a.title").first() ?: return null
+        val name = titleData.ownText()
+        val description = titleData.parents()[0].ownText()
+        val grade = row.select("td").last()?.select("span img")?.attr("title").orEmpty()
+        return Trophy(
+            name = name,
+            description = description,
+            grade = grade
         )
     }
 }
@@ -109,6 +134,16 @@ private fun parseGame(game: Element): Game {
         totalTrophies = gameTotalTrophies.toIntOrZero(),
     )
 }
+
+data class CompleteGame(
+    val trophies: List<Trophy>
+)
+
+data class Trophy(
+    val name: String,
+    val description: String,
+    val grade: String
+)
 
 private fun String.toIntOrZero() =
     this.replace(",","")

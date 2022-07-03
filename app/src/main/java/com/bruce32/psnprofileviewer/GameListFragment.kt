@@ -15,7 +15,13 @@ import kotlinx.coroutines.launch
 class GameListFragment : Fragment() {
 
     private val service: PSNProfileService = PSNProfileServiceImpl()
-    private val adapter = GameListAdapter(emptyList())
+    private val adapter = GameListAdapter(emptyList()) { href ->
+        println("clicked $href")
+        viewLifecycleOwner.lifecycleScope.launch {
+            val elems = href.split("/").filter { it.isNotBlank() }
+            service.game(gameId = elems[1], userName = elems[2])
+        }
+    }
 
     private var _binding: FragmentGameListBinding? = null
     private val binding

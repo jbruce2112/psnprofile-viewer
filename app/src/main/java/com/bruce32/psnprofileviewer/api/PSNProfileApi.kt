@@ -9,4 +9,12 @@ interface PSNProfileAPI {
         @Path("username")
         userName: String
     ): String
+
+    @GET("/trophies/{gameId}/{username}")
+    suspend fun game(
+        @Path("gameId")
+        gameId: String,
+        @Path("username")
+        userName: String
+    ): String
 }
