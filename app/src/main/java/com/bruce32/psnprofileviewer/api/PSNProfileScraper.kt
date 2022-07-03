@@ -63,7 +63,7 @@ class PSNProfileScraperImpl: PSNProfileScraper {
 private fun parseGame(game: Element): Game {
     val name = game.select("a.title").text()
     val platform = if (game.select("span.tag.platform").size > 1) {
-        game.select("span.tag.platform").joinToString(",") { it.text() }
+        game.select("span.tag.platform").joinToString(", ") { it.text() }
     } else {
         game.select("span.tag.platform").text()
     }

@@ -12,15 +12,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val service: PSNProfileService = PSNProfileServiceImpl()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        lifecycleScope.launch {
-            val profile = service.profile("jbruce2112")
-            Log.d("MainActivity", profile.toString())
-        }
     }
 }
