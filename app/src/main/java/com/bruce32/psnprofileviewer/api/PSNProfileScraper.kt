@@ -1,12 +1,19 @@
 package com.bruce32.psnprofileviewer.api
 
+import com.bruce32.psnprofileviewer.model.Game
+import com.bruce32.psnprofileviewer.model.Profile
+import com.bruce32.psnprofileviewer.model.ProfileStats
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.net.URL
 
-class PSNProfileScraper {
+interface PSNProfileScraper {
+    fun profile(html: String): Profile
+}
 
-    fun profile(html: String): Profile {
+class PSNProfileScraperImpl: PSNProfileScraper {
+
+    override fun profile(html: String): Profile {
         val doc = Jsoup.parse(html)
         val username = doc.select("span.username").text()
         val level = doc.select("li.icon-sprite.level").text()
@@ -50,56 +57,8 @@ class PSNProfileScraper {
             stats = profileStats
         )
     }
-
-    fun game(html: String): String {
-        TODO("Not yet implemented")
-    }
 }
 
-data class Profile(
-    val psnId: String,
-    val level: Int,
-    val levelProgressPercent: Double,
-    val totalTrophies: Int,
-    val totalPlatinum: Int,
-    val totalGold: Int,
-    val totalSilver: Int,
-    val totalBronze: Int,
-    val stats: ProfileStats,
-    val games: List<Game>
-)
-
-data class ProfileStats(
-    val gamesPlayed: Int,
-    val completedGames: Int,
-    val completionPercent: Double,
-    val unearnedTrophies: Int,
-    val trophiesPerDay: Double,
-    val worldRank: Int,
-    val countryRank: Int
-)
-
-data class Game(
-    val name: String,
-    val coverURL: URL?,
-    val platform: String,
-    val platinum: Int?,
-    val href: String,
-    val gold: Int,
-    val silver: Int,
-    val bronze: Int,
-    val completionPercent: Double,
-    val earnedTrophies: Int,
-    val totalTrophies: Int
-)
-
-private fun String.toIntOrZero() =
-    this.replace(",","")
-        .toIntOrNull() ?: 0
-
-private fun String.toDoubleOrZero() =
-    this.replace(",","")
-        .toDoubleOrNull() ?: 0.0
 
 private fun parseGame(game: Element): Game {
     val name = game.select("a.title").text()
@@ -150,3 +109,11 @@ private fun parseGame(game: Element): Game {
         totalTrophies = gameTotalTrophies.toIntOrZero(),
     )
 }
+
+private fun String.toIntOrZero() =
+    this.replace(",","")
+        .toIntOrNull() ?: 0
+
+private fun String.toDoubleOrZero() =
+    this.replace(",","")
+        .toDoubleOrNull() ?: 0.0
