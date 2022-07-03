@@ -10,7 +10,7 @@ interface PSNProfileService {
 }
 
 class PSNProfileServiceImpl(
-    private val scraper: PSNProfileScraper
+    private val scraper: PSNProfileScraper = PSNProfileScraperImpl()
 ): PSNProfileService {
 
     private val retrofit = Retrofit.Builder()

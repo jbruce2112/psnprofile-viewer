@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val service: PSNProfileService = PSNProfileServiceImpl(scraper = PSNProfileScraperImpl())
+    private val service: PSNProfileService = PSNProfileServiceImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
