@@ -6,14 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/name_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toStartOf="@+id/grade_view"
+        app:layout_constraintStart_toEndOf="@id/image_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Trophy name" />
 
@@ -23,19 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/grade_view"
+        app:layout_constraintStart_toEndOf="@id/image_view"
         app:layout_constraintTop_toBottomOf="@+id/name_view"
         tools:text="Trophy Description" />
-
-    <Space
-        android:id="@+id/space_view"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/grade_view"
-        app:layout_constraintStart_toEndOf="@id/description_view"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/grade_view"

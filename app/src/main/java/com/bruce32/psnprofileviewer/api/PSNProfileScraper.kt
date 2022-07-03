@@ -43,8 +43,8 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             countryRank = countryRank?.toIntOrZero() ?: 0
         )
 
-        val gamesTable = doc.select("[id=\"gamesTable\"] tr")
-        val games = gamesTable.map { parseGame(it) }
+        val gamesRows = doc.select("#gamesTable tr")
+        val games = gamesRows.map { parseGame(it) }
 
         return Profile(
             psnId = username,
@@ -63,7 +63,7 @@ class PSNProfileScraperImpl : PSNProfileScraper {
     override fun game(html: String): CompleteGame {
         val doc = Jsoup.parse(html)
 
-        val trophiesRows = doc.select("[id=\"content\"] table.zebra tr")
+        val trophiesRows = doc.select("#content table.zebra tr")
         val trophies = trophiesRows.mapNotNull { parseTrophy(it) }
         return CompleteGame(
             trophies = trophies
@@ -71,15 +71,19 @@ class PSNProfileScraperImpl : PSNProfileScraper {
     }
 
     private fun parseTrophy(row: Element): Trophy? {
-        Log.d("Parse", "going to parse row $row")
         val titleData = row.select("td a.title").first() ?: return null
         val name = titleData.ownText()
-        val description = titleData.parents()[0].ownText()
-        val grade = row.select("td").last()?.select("span img")?.attr("title").orEmpty()
+        val description = titleData.parents().first()?.ownText().orEmpty()
+        val grade = row.select("td:last-child span img").attr("title")
+        val imageURL = row.select("td a picture img").attr("src")
+        val earned = row.hasClass("completed")
+
         return Trophy(
             name = name,
             description = description,
-            grade = grade
+            grade = grade,
+            imageURL = URL(imageURL),
+            earned = earned
         )
     }
 }
@@ -93,6 +97,8 @@ private fun parseGame(game: Element): Game {
     }
 
     val href = game.select("a.title").attr("href")
+    val hrefComponents = href.split("/").filter { it.isNotBlank() }
+    val psnProfilesId = hrefComponents[1]
 
     val coverURL = game.select("picture.game img").attr("src")
 
@@ -124,7 +130,7 @@ private fun parseGame(game: Element): Game {
         coverURL = URL(coverURL),
         platform = platform,
         platinum = platinum,
-        href = href,
+        id = psnProfilesId,
         gold = gold.toIntOrZero(),
         silver = silver.toIntOrZero(),
         bronze = bronze.toIntOrZero(),
@@ -141,7 +147,9 @@ data class CompleteGame(
 data class Trophy(
     val name: String,
     val description: String,
-    val grade: String
+    val grade: String,
+    val imageURL: URL,
+    val earned: Boolean
 )
 
 private fun String.toIntOrZero() =

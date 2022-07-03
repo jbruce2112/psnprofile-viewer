@@ -4,10 +4,10 @@ import java.net.URL
 
 data class Game(
     val name: String,
-    val coverURL: URL?,
+    val coverURL: URL,
     val platform: String,
     val platinum: Int?,
-    val href: String,
+    val id: String,
     val gold: Int,
     val silver: Int,
     val bronze: Int,

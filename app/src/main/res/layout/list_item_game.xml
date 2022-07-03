@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -23,6 +23,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintEnd_toStartOf="@+id/completion_view"
         app:layout_constraintStart_toEndOf="@+id/cover_image_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Game name" />
@@ -36,8 +37,23 @@
         android:layout_marginBottom="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/completion_view"
         app:layout_constraintStart_toEndOf="@+id/cover_image_view"
         app:layout_constraintTop_toBottomOf="@+id/name_view"
         tools:text="0 Platinum, 2 Gold, 3 Silver, 4 Bronze" />
+
+    <TextView
+        android:id="@+id/completion_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="textEnd"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="54%" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

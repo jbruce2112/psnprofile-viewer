@@ -51,12 +51,11 @@ class GameListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { href ->
-                    val components = href.split("/").filter { it.isNotBlank() }
+                binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { id ->
                     findNavController().navigate(
                         GameListFragmentDirections.showTrophyList(
-                            components[1],
-                            components[2]
+                            id,
+                            "jbruce2112"
                         )
                     )
                 }

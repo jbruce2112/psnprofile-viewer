@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bruce32.psnprofileviewer.api.CompleteGame
 import com.bruce32.psnprofileviewer.api.Trophy
 import com.bruce32.psnprofileviewer.databinding.ListItemTrophyBinding
+import com.bumptech.glide.Glide
+import com.google.android.material.R.color.material_dynamic_secondary0
 
 class TrophyHolder(
     private val binding: ListItemTrophyBinding
@@ -15,6 +17,13 @@ class TrophyHolder(
         binding.nameView.text = trophy.name
         binding.descriptionView.text = trophy.description
         binding.gradeView.text = trophy.grade
+        if (trophy.earned) {
+            binding.root.setBackgroundColor(material_dynamic_secondary0)
+        }
+
+        Glide.with(binding.imageView)
+            .load(trophy.imageURL.toString())
+            .into(binding.imageView)
     }
 }
 

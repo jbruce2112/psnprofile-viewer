@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bruce32.psnprofileviewer.databinding.ListItemGameBinding
 import com.bruce32.psnprofileviewer.model.Game
 import com.bumptech.glide.Glide
+import com.google.android.material.R.color.material_dynamic_secondary0
+import kotlin.math.roundToInt
 
 class GameHolder(
     private val binding: ListItemGameBinding
@@ -15,13 +17,18 @@ class GameHolder(
         binding.nameView.text = game.name
         binding.trophyView.text =
             "${game.platform}\n${game.gold} Gold, ${game.silver} Silver, ${game.bronze} Bronze"
-        game.coverURL?.let {
-            Glide.with(binding.coverImageView)
-                .load(it.toString())
-                .into(binding.coverImageView)
+        binding.completionView.text = "${game.completionPercent.roundToInt()}%"
+
+        if (game.earnedTrophies == game.totalTrophies) {
+            binding.root.setBackgroundColor(material_dynamic_secondary0)
         }
+
+        Glide.with(binding.coverImageView)
+            .load(game.coverURL.toString())
+            .into(binding.coverImageView)
+
         binding.root.setOnClickListener {
-            onClick(game.href)
+            onClick(game.id)
         }
     }
 }
