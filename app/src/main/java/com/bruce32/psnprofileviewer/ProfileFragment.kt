@@ -10,6 +10,7 @@ import com.bruce32.psnprofileviewer.api.PSNProfileService
 import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
 import com.bruce32.psnprofileviewer.model.Profile
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 class ProfileFragment(
@@ -31,14 +32,18 @@ class ProfileFragment(
 
         viewLifecycleOwner.lifecycleScope.launch {
             val profile = service.profile("jbruce2112")
-            bind(profile, "jbruce2112")
+            bind(profile)
         }
 
         return binding.root
     }
 
-    private fun bind(profile: Profile, userName: String) {
-        binding.userNameView.text = userName
+    private fun bind(profile: Profile) {
+        Glide.with(binding.avatarImageView)
+            .load(profile.avatarURL.toString())
+            .into(binding.avatarImageView)
+
+        binding.userNameView.text = profile.psnId
         binding.trophiesValue.text = "${profile.totalPlatinum} Platinum, ${profile.totalGold} Gold, ${profile.totalSilver} Silver, ${profile.totalBronze} Bronze"
         binding.gamesPlayedValue.text = profile.stats.gamesPlayed.toString()
         binding.percentCompleteValue.text = "${profile.stats.completionPercent}%"

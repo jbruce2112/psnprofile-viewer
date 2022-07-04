@@ -23,6 +23,8 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             .replace("width: ", "")
             .replace("%;", "")
 
+        val avatarURL = doc.select("div.avatar div img").attr("src")
+
         val totalTrophies = doc.select("li.total").text()
         val totalPlatinum = doc.select("li.platinum").text()
         val totalGold = doc.select("li.gold").text()
@@ -48,6 +50,7 @@ class PSNProfileScraperImpl : PSNProfileScraper {
         return Profile(
             psnId = username,
             level = level.toIntOrZero(),
+            avatarURL = URL(avatarURL),
             levelProgressPercent = levelProgressPercent.toDoubleOrZero(),
             totalTrophies = totalTrophies.toIntOrZero(),
             totalPlatinum = totalPlatinum.toIntOrZero(),
