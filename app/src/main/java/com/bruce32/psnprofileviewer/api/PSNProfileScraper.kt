@@ -1,12 +1,11 @@
 package com.bruce32.psnprofileviewer.api
 
-import android.util.Log
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.Profile
 import com.bruce32.psnprofileviewer.model.ProfileStats
-import java.net.URL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import java.net.URL
 
 interface PSNProfileScraper {
     fun profile(html: String): Profile

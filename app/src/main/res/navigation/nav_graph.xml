@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/gameListFragment">
 
     <fragment
         android:id="@+id/gameListFragment"
         android:name="com.bruce32.psnprofileviewer.GameListFragment"
-        android:label="GameListFragment" >
+        android:label="Games" >
         <action
             android:id="@+id/show_trophy_list"
             app:destination="@id/trophyListFragment" />
@@ -15,12 +16,18 @@
     <fragment
         android:id="@+id/trophyListFragment"
         android:name="com.bruce32.psnprofileviewer.TrophyListFragment"
-        android:label="TrophyListFragment" >
+        android:label="Trophies" >
         <argument
             android:name="gameId"
             app:argType="string" />
         <argument
             android:name="userName"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.bruce32.psnprofileviewer.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" >
     </fragment>
 </navigation>

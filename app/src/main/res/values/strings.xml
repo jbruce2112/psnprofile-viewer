@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">PSNProfileViewer</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in_text">Please enter your user name on the Switch Account screen</string>
 </resources>
