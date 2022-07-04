@@ -3,9 +3,9 @@ package com.bruce32.psnprofileviewer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bruce32.psnprofileviewer.api.CompleteGame
-import com.bruce32.psnprofileviewer.api.Trophy
 import com.bruce32.psnprofileviewer.databinding.ListItemTrophyBinding
+import com.bruce32.psnprofileviewer.model.GameDetails
+import com.bruce32.psnprofileviewer.model.Trophy
 import com.bumptech.glide.Glide
 import com.google.android.material.R.color.material_dynamic_secondary0
 
@@ -28,7 +28,7 @@ class TrophyHolder(
 }
 
 class TrophyListAdapter(
-    private var game: CompleteGame
+    private var game: GameDetails
 ) : RecyclerView.Adapter<TrophyHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrophyHolder {
@@ -44,7 +44,7 @@ class TrophyListAdapter(
 
     override fun getItemCount() = game.trophies.size
 
-    fun update(game: CompleteGame) {
+    fun update(game: GameDetails) {
         this.game = game
         notifyDataSetChanged()
     }

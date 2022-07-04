@@ -1,5 +1,6 @@
 package com.bruce32.psnprofileviewer.api
 
+import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -7,7 +8,7 @@ import retrofit2.create
 
 interface PSNProfileService {
     suspend fun profile(userName: String): Profile
-    suspend fun game(gameId: String, userName: String): CompleteGame
+    suspend fun game(gameId: String, userName: String): GameDetails
 }
 
 class PSNProfileServiceImpl(

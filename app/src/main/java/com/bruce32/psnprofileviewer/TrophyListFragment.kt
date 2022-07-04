@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.api.CompleteGame
+import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.api.PSNProfileService
 import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class TrophyListFragment : Fragment() {
 
     private val service: PSNProfileService = PSNProfileServiceImpl()
-    private val adapter = TrophyListAdapter(CompleteGame(trophies = emptyList()))
+    private val adapter = TrophyListAdapter(GameDetails(trophies = emptyList()))
 
     private val args: TrophyListFragmentArgs by navArgs()
 

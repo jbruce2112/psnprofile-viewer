@@ -12,6 +12,12 @@ data class Profile(
     val totalGold: Int,
     val totalSilver: Int,
     val totalBronze: Int,
-    val stats: ProfileStats,
+    val gamesPlayed: Int,
+    val completedGames: Int,
+    val completionPercent: Double,
+    val unearnedTrophies: Int,
+    val trophiesPerDay: Double,
+    val worldRank: Int,
+    val countryRank: Int,
     val games: List<Game>
 )

@@ -45,12 +45,12 @@ class ProfileFragment(
 
         binding.userNameView.text = profile.psnId
         binding.trophiesValue.text = "${profile.totalPlatinum} Platinum, ${profile.totalGold} Gold, ${profile.totalSilver} Silver, ${profile.totalBronze} Bronze"
-        binding.gamesPlayedValue.text = profile.stats.gamesPlayed.toString()
-        binding.percentCompleteValue.text = "${profile.stats.completionPercent}%"
-        binding.completedGamesValue.text = profile.stats.completedGames.toString()
-        binding.unearnedTrophiesValue.text = profile.stats.unearnedTrophies.toString()
-        binding.worldRankValue.text = String.format("%,d", profile.stats.worldRank)
-        binding.countryRankValue.text = String.format("%,d", profile.stats.countryRank)
+        binding.gamesPlayedValue.text = profile.gamesPlayed.toString()
+        binding.percentCompleteValue.text = "${profile.completionPercent}%"
+        binding.completedGamesValue.text = profile.completedGames.toString()
+        binding.unearnedTrophiesValue.text = profile.unearnedTrophies.toString()
+        binding.worldRankValue.text = String.format("%,d", profile.worldRank)
+        binding.countryRankValue.text = String.format("%,d", profile.countryRank)
         binding.levelValue.text = profile.level.toString()
     }
 }

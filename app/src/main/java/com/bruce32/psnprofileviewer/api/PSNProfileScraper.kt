@@ -1,15 +1,16 @@
 package com.bruce32.psnprofileviewer.api
 
 import com.bruce32.psnprofileviewer.model.Game
+import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
-import com.bruce32.psnprofileviewer.model.ProfileStats
+import com.bruce32.psnprofileviewer.model.Trophy
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.net.URL
 
 interface PSNProfileScraper {
     fun profile(html: String): Profile
-    fun game(html: String): CompleteGame
+    fun game(html: String): GameDetails
 }
 
 class PSNProfileScraperImpl : PSNProfileScraper {
@@ -34,15 +35,6 @@ class PSNProfileScraperImpl : PSNProfileScraper {
         val stats = doc.select("span.stat.grow").map { it.ownText() }
         val worldRank = doc.select("span.rank.stat a").firstOrNull()?.ownText()
         val countryRank = doc.select("span.country-rank.stat a").firstOrNull()?.ownText()
-        val profileStats = ProfileStats(
-            gamesPlayed = stats[0].toIntOrZero(),
-            completedGames = stats[1].toIntOrZero(),
-            completionPercent = stats[2].replace("%", "").toDoubleOrZero(),
-            unearnedTrophies = stats[3].toIntOrZero(),
-            trophiesPerDay = stats[4].toDoubleOrZero(),
-            worldRank = worldRank?.toIntOrZero() ?: 0,
-            countryRank = countryRank?.toIntOrZero() ?: 0
-        )
 
         val gamesRows = doc.select("#gamesTable tr")
         val games = gamesRows.map { parseGame(it) }
@@ -57,17 +49,23 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             totalGold = totalGold.toIntOrZero(),
             totalSilver = totalSilver.toIntOrZero(),
             totalBronze = totalBronze.toIntOrZero(),
+            gamesPlayed = stats[0].toIntOrZero(),
+            completedGames = stats[1].toIntOrZero(),
+            completionPercent = stats[2].replace("%", "").toDoubleOrZero(),
+            unearnedTrophies = stats[3].toIntOrZero(),
+            trophiesPerDay = stats[4].toDoubleOrZero(),
+            worldRank = worldRank?.toIntOrZero() ?: 0,
+            countryRank = countryRank?.toIntOrZero() ?: 0,
             games = games,
-            stats = profileStats
         )
     }
 
-    override fun game(html: String): CompleteGame {
+    override fun game(html: String): GameDetails {
         val doc = Jsoup.parse(html)
 
         val trophiesRows = doc.select("#content table.zebra tr")
         val trophies = trophiesRows.mapNotNull { parseTrophy(it) }
-        return CompleteGame(
+        return GameDetails(
             trophies = trophies
         )
     }
@@ -141,18 +139,6 @@ private fun parseGame(game: Element): Game {
         totalTrophies = gameTotalTrophies.toIntOrZero(),
     )
 }
-
-data class CompleteGame(
-    val trophies: List<Trophy>
-)
-
-data class Trophy(
-    val name: String,
-    val description: String,
-    val grade: String,
-    val imageURL: URL,
-    val earned: Boolean
-)
 
 private fun String.toIntOrZero() =
     this.replace(",", "")
