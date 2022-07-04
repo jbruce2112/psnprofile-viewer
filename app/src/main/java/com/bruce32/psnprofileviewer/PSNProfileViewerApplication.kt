@@ -3,7 +3,7 @@ package com.bruce32.psnprofileviewer
 import android.app.Application
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 
-class PSNProfileViewerApplication: Application() {
+class PSNProfileViewerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ProfilePersistence.initialize(this)

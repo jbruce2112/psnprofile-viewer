@@ -11,22 +11,24 @@ class ProfileRepository(
     private val persistence: ProfilePersistence = ProfilePersistence.get()
 ) {
 
-    val profile = persistence.getProfile("jbruce2112")
-    val games = persistence.getGames("jbruce2112")
-    fun getTrophies(gameId: String) = persistence.getTrophies(gameId, "jbruce2112")
+    suspend fun profile() = persistence.getProfile(currentPsnId)
+    fun games() = persistence.getGames(currentPsnId)
+    fun trophies(gameId: String) = persistence.getTrophies(gameId, currentPsnId)
 
-    suspend fun refreshProfileAndGames(psnId: String) {
+    suspend fun refreshProfileAndGames() {
         withContext(Dispatchers.IO) {
-            val result = service.profileAndGames(psnId)
+            val result = service.profileAndGames(currentPsnId)
             persistence.insertProfile(result.profile)
             persistence.insertGames(result.games)
         }
     }
 
-    suspend fun refreshTrophies(gameId: String, psnId: String) {
+    suspend fun refreshTrophies(gameId: String) {
         withContext(Dispatchers.IO) {
-            val gameDetails = service.gameDetails(gameId, psnId)
+            val gameDetails = service.gameDetails(gameId, currentPsnId)
             persistence.insertTrophies(gameDetails.trophies)
         }
     }
+
+    private val currentPsnId = "jbruce2112"
 }

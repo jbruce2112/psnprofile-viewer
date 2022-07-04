@@ -27,7 +27,7 @@ abstract class ProfileDatabase : RoomDatabase() {
 @Dao
 interface ProfileDao {
     @Query("SELECT * FROM profile WHERE psnId=(:psnId)")
-    fun getProfile(psnId: String): Flow<Profile>
+    suspend fun getProfile(psnId: String): Profile
 
     @Query("SELECT * FROM game WHERE playerPsnId=(:psnId)")
     fun getGames(psnId: String): Flow<List<Game>>
@@ -70,7 +70,7 @@ class ProfilePersistence private constructor(context: Context) {
         }
     }
 
-    fun getProfile(psnId: String) = database.profileDao().getProfile(psnId)
+    suspend fun getProfile(psnId: String) = database.profileDao().getProfile(psnId)
 
     fun getGames(psnId: String) = database.profileDao().getGames(psnId)
 

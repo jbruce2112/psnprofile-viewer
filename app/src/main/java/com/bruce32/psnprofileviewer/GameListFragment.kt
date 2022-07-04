@@ -1,6 +1,7 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +32,7 @@ class GameListFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
-
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-
         return binding.root
     }
 
@@ -42,24 +41,22 @@ class GameListFragment() : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                refreshGameListAndObserve("jbruce2112")
+                refreshGameListAndObserve()
             }
         }
     }
 
-    private suspend fun refreshGameListAndObserve(psnId: String) {
+    private suspend fun refreshGameListAndObserve() {
         viewModel.games.collect {
-            reconfigureListAdapter(it, psnId)
+            Log.d("GameList", "game list updated with ${it.size} games")
+            reconfigureListAdapter(it)
         }
     }
 
-    private fun reconfigureListAdapter(games: List<Game>, psnId: String) {
+    private fun reconfigureListAdapter(games: List<Game>) {
         binding.listRecyclerView.adapter = GameListAdapter(games) { gameId ->
             findNavController().navigate(
-                GameListFragmentDirections.showTrophyList(
-                    gameId,
-                    psnId
-                )
+                GameListFragmentDirections.showTrophyList(gameId)
             )
         }
     }
