@@ -14,7 +14,11 @@ import com.bruce32.psnprofileviewer.model.Profile
 import com.bruce32.psnprofileviewer.model.Trophy
 import kotlinx.coroutines.flow.Flow
 
-@Database(entities = [Profile::class, Game::class, Trophy::class], version = 2, exportSchema = false)
+@Database(
+    entities = [Profile::class, Game::class, Trophy::class],
+    version = 2,
+    exportSchema = false
+)
 @TypeConverters(ProfileTypeConverters::class)
 abstract class ProfileDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
