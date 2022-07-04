@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

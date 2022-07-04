@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.application
 
 import com.bruce32.psnprofileviewer.api.PSNProfileService
 import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl

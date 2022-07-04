@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/gameListFragment"
-        android:name="com.bruce32.psnprofileviewer.GameListFragment"
+        android:name="com.bruce32.psnprofileviewer.gamelist.GameListFragment"
         android:label="Games" >
         <action
             android:id="@+id/show_trophy_list"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/trophyListFragment"
-        android:name="com.bruce32.psnprofileviewer.TrophyListFragment"
+        android:name="com.bruce32.psnprofileviewer.trophylist.TrophyListFragment"
         android:label="Trophies" >
         <argument
             android:name="gameId"
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.bruce32.psnprofileviewer.ProfileFragment"
+        android:name="com.bruce32.psnprofileviewer.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
     </fragment>

@@ -1,26 +1,29 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.gamelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bruce32.psnprofileviewer.model.Profile
+import com.bruce32.psnprofileviewer.application.ProfileRepository
+import com.bruce32.psnprofileviewer.model.Game
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
+class GameListViewModel(
     private val repository: ProfileRepository = ProfileRepository()
 ) : ViewModel() {
 
-    private val _profile: MutableStateFlow<Profile?> = MutableStateFlow(null)
-    val profile: StateFlow<Profile?>
-        get() = _profile.asStateFlow()
+    private val _games: MutableStateFlow<List<Game>> = MutableStateFlow(emptyList())
+    val games: StateFlow<List<Game>>
+        get() = _games.asStateFlow()
 
     init {
         viewModelScope.launch {
             async {
-                _profile.value = repository.profile()
+                repository.games().collect {
+                    _games.value = it
+                }
             }
             async {
                 repository.refreshProfileAndGames()

@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.gamelist
 
 import android.os.Bundle
 import android.util.Log

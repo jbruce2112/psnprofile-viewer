@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.trophylist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

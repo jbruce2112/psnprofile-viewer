@@ -1,8 +1,9 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.trophylist
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.model.Trophy
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow

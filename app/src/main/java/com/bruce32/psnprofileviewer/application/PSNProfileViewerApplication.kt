@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer
+package com.bruce32.psnprofileviewer.application
 
 import android.app.Application
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
