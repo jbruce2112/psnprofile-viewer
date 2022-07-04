@@ -1,23 +1,24 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
+import com.bruce32.psnprofileviewer.model.Game
 import kotlinx.coroutines.launch
 
-class GameListFragment : Fragment() {
+class GameListFragment() : Fragment() {
 
-    private val service: PSNProfileService = PSNProfileServiceImpl()
+    private val viewModel: GameListViewModel by viewModels()
 
     private var _binding: FragmentGameListBinding? = null
     private val binding
@@ -25,24 +26,13 @@ class GameListFragment : Fragment() {
             "Binding is null"
         }
 
-    private val adapter
-        get() = binding.root.adapter as GameListAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
-
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            val profile = service.profile("jbruce2112")
-            adapter.update(profile.games)
-        }
-
         return binding.root
     }
 
@@ -51,15 +41,23 @@ class GameListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { id ->
-                    findNavController().navigate(
-                        GameListFragmentDirections.showTrophyList(
-                            id,
-                            "jbruce2112"
-                        )
-                    )
-                }
+                refreshGameListAndObserve()
             }
+        }
+    }
+
+    private suspend fun refreshGameListAndObserve() {
+        viewModel.games.collect {
+            Log.d("GameList", "game list updated with ${it.size} games")
+            reconfigureListAdapter(it)
+        }
+    }
+
+    private fun reconfigureListAdapter(games: List<Game>) {
+        binding.listRecyclerView.adapter = GameListAdapter(games) { gameId ->
+            findNavController().navigate(
+                GameListFragmentDirections.showTrophyList(gameId)
+            )
         }
     }
 }

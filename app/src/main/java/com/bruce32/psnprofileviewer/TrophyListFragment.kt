@@ -1,31 +1,31 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.model.GameDetails
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
 class TrophyListFragment : Fragment() {
 
-    private val service: PSNProfileService = PSNProfileServiceImpl()
-    private val adapter = TrophyListAdapter(GameDetails(trophies = emptyList()))
-
     private val args: TrophyListFragmentArgs by navArgs()
+    private val viewModel: TrophyListViewModel by viewModels {
+        TrophyListViewModelFactory(args.gameId)
+    }
 
     private var _binding: FragmentTrophyListBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
             "Binding is null"
         }
+    private val adapter = TrophyListAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +38,10 @@ class TrophyListFragment : Fragment() {
         binding.listRecyclerView.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val game = service.game(args.gameId, args.userName)
-            adapter.update(game)
+            viewModel.trophies.collect {
+                Log.d("TrophyList", "${args.gameId} updated with ${it.size} trophies")
+                adapter.update(it)
+            }
         }
 
         return binding.root
