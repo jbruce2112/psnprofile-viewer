@@ -19,8 +19,10 @@ class GameHolder(
             "${game.platform}\n${game.gold} Gold, ${game.silver} Silver, ${game.bronze} Bronze"
         binding.completionView.text = "${game.completionPercent.roundToInt()}%"
 
-        if (game.earnedTrophies == game.totalTrophies) {
+        if (game.platinum == 1 || game.earnedTrophies == game.totalTrophies) {
             binding.root.setBackgroundColor(material_dynamic_secondary0)
+        } else {
+            binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
         Glide.with(binding.coverImageView)

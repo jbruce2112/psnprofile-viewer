@@ -19,6 +19,8 @@ class TrophyHolder(
         binding.gradeView.text = trophy.grade
         if (trophy.earned) {
             binding.root.setBackgroundColor(material_dynamic_secondary0)
+        } else {
+            binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
         Glide.with(binding.imageView)
