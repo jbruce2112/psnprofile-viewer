@@ -3,19 +3,20 @@ package com.bruce32.psnprofileviewer.api
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
+import com.bruce32.psnprofileviewer.model.ProfileWithGames
 import com.bruce32.psnprofileviewer.model.Trophy
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.net.URL
 
 interface PSNProfileScraper {
-    fun profile(html: String): Profile
-    fun game(html: String): GameDetails
+    fun profileWithGames(html: String): ProfileWithGames
+    fun gameDetails(html: String, gameId: String, psnId: String): GameDetails
 }
 
 class PSNProfileScraperImpl : PSNProfileScraper {
 
-    override fun profile(html: String): Profile {
+    override fun profileWithGames(html: String): ProfileWithGames {
         val doc = Jsoup.parse(html)
         val username = doc.select("span.username").text()
         val level = doc.select("li.icon-sprite.level").text()
@@ -37,9 +38,9 @@ class PSNProfileScraperImpl : PSNProfileScraper {
         val countryRank = doc.select("span.country-rank.stat a").firstOrNull()?.ownText()
 
         val gamesRows = doc.select("#gamesTable tr")
-        val games = gamesRows.map { parseGame(it) }
+        val games = gamesRows.map { parseGame(it, username) }
 
-        return Profile(
+        val profile = Profile(
             psnId = username,
             level = level.toIntOrZero(),
             avatarURL = URL(avatarURL),
@@ -55,22 +56,26 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             unearnedTrophies = stats[3].toIntOrZero(),
             trophiesPerDay = stats[4].toDoubleOrZero(),
             worldRank = worldRank?.toIntOrZero() ?: 0,
-            countryRank = countryRank?.toIntOrZero() ?: 0,
-            games = games,
+            countryRank = countryRank?.toIntOrZero() ?: 0
+        )
+
+        return ProfileWithGames(
+            profile = profile,
+            games = games
         )
     }
 
-    override fun game(html: String): GameDetails {
+    override fun gameDetails(html: String, gameId: String, psnId: String): GameDetails {
         val doc = Jsoup.parse(html)
 
         val trophiesRows = doc.select("#content table.zebra tr")
-        val trophies = trophiesRows.mapNotNull { parseTrophy(it) }
+        val trophies = trophiesRows.mapNotNull { parseTrophy(it, gameId, psnId) }
         return GameDetails(
             trophies = trophies
         )
     }
 
-    private fun parseTrophy(row: Element): Trophy? {
+    private fun parseTrophy(row: Element, gameId: String, psnId: String): Trophy? {
         val titleData = row.select("td a.title").first() ?: return null
         val name = titleData.ownText()
         val description = titleData.parents().first()?.ownText().orEmpty()
@@ -83,12 +88,14 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             description = description,
             grade = grade,
             imageURL = URL(imageURL),
-            earned = earned
+            earned = earned,
+            gameId = gameId,
+            playerPsnId = psnId
         )
     }
 }
 
-private fun parseGame(game: Element): Game {
+private fun parseGame(game: Element, psnId: String): Game {
     val name = game.select("a.title").text()
     val platform = if (game.select("span.tag.platform").size > 1) {
         game.select("span.tag.platform").joinToString(", ") { it.text() }
@@ -137,6 +144,7 @@ private fun parseGame(game: Element): Game {
         completionPercent = completionPercent.toDoubleOrZero(),
         earnedTrophies = earnedTrophies.toIntOrZero(),
         totalTrophies = gameTotalTrophies.toIntOrZero(),
+        playerPsnId = psnId
     )
 }
 

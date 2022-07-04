@@ -1,6 +1,7 @@
 package com.bruce32.psnprofileviewer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,16 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.model.GameDetails
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
-class TrophyListFragment : Fragment() {
+class TrophyListFragment(
+    private val repository: ProfileRepository = ProfileRepository()
+) : Fragment() {
 
-    private val service: PSNProfileService = PSNProfileServiceImpl()
-    private val adapter = TrophyListAdapter(GameDetails(trophies = emptyList()))
+    private val adapter = TrophyListAdapter(emptyList())
 
     private val args: TrophyListFragmentArgs by navArgs()
 
@@ -38,8 +37,11 @@ class TrophyListFragment : Fragment() {
         binding.listRecyclerView.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val game = service.game(args.gameId, args.userName)
-            adapter.update(game)
+            repository.refreshTrophies(args.gameId, args.userName)
+            repository.getTrophies(args.gameId).collect {
+                Log.d("TrophyListUpdate", "${args.gameId} updated with ${it.size} trophies")
+                adapter.update(it)
+            }
         }
 
         return binding.root

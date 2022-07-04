@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
 import com.bruce32.psnprofileviewer.model.Profile
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 class ProfileFragment(
-    private val service: PSNProfileService = PSNProfileServiceImpl()
+    private val repository: ProfileRepository = ProfileRepository()
 ) : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
@@ -31,8 +29,10 @@ class ProfileFragment(
         _binding = FragmentProfileBinding.inflate(layoutInflater)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val profile = service.profile("jbruce2112")
-            bind(profile)
+            repository.refreshProfileAndGames("jbruce2112")
+            repository.profile.collect {
+                bind(it)
+            }
         }
 
         return binding.root

@@ -21,6 +21,5 @@ data class Profile(
     val unearnedTrophies: Int,
     val trophiesPerDay: Double,
     val worldRank: Int,
-    val countryRank: Int,
-    val games: List<Game>
+    val countryRank: Int
 )

@@ -1,14 +1,14 @@
 package com.bruce32.psnprofileviewer.api
 
 import com.bruce32.psnprofileviewer.model.GameDetails
-import com.bruce32.psnprofileviewer.model.Profile
+import com.bruce32.psnprofileviewer.model.ProfileWithGames
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
 interface PSNProfileService {
-    suspend fun profile(userName: String): Profile
-    suspend fun game(gameId: String, userName: String): GameDetails
+    suspend fun profileAndGames(userName: String): ProfileWithGames
+    suspend fun gameDetails(gameId: String, userName: String): GameDetails
 }
 
 class PSNProfileServiceImpl(
@@ -22,9 +22,9 @@ class PSNProfileServiceImpl(
 
     private val psnProfileApi = retrofit.create<PSNProfileAPI>()
 
-    override suspend fun profile(userName: String) =
-        scraper.profile(html = psnProfileApi.profile(userName))
+    override suspend fun profileAndGames(userName: String) =
+        scraper.profileWithGames(html = psnProfileApi.profile(userName))
 
-    override suspend fun game(gameId: String, userName: String) =
-        scraper.game(html = psnProfileApi.game(gameId, userName))
+    override suspend fun gameDetails(gameId: String, userName: String) =
+        scraper.gameDetails(html = psnProfileApi.game(gameId, userName), gameId, userName)
 }
