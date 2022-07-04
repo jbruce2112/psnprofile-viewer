@@ -5,9 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.bruce32.psnprofileviewer.api.PSNProfileService
+import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
+import com.bruce32.psnprofileviewer.model.Profile
+import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment() {
+class ProfileFragment(
+    private val service: PSNProfileService = PSNProfileServiceImpl()
+) : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding
@@ -21,8 +28,24 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(layoutInflater)
-        binding.userNameView.text = "jbruce2112"
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val profile = service.profile("jbruce2112")
+            bind(profile, "jbruce2112")
+        }
 
         return binding.root
+    }
+
+    private fun bind(profile: Profile, userName: String) {
+        binding.userNameView.text = userName
+        binding.trophiesValue.text = "${profile.totalPlatinum} Platinum, ${profile.totalGold} Gold, ${profile.totalSilver} Silver, ${profile.totalBronze} Bronze"
+        binding.gamesPlayedValue.text = profile.stats.gamesPlayed.toString()
+        binding.percentCompleteValue.text = "${profile.stats.completionPercent}%"
+        binding.completedGamesValue.text = profile.stats.completedGames.toString()
+        binding.unearnedTrophiesValue.text = profile.stats.unearnedTrophies.toString()
+        binding.worldRankValue.text = String.format("%,d", profile.stats.worldRank)
+        binding.countryRankValue.text = String.format("%,d", profile.stats.countryRank)
+        binding.levelValue.text = profile.level.toString()
     }
 }
