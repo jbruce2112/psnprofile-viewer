@@ -1,9 +1,12 @@
 package com.bruce32.psnprofileviewer.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.net.URL
 
+@Entity
 data class Profile(
-    val psnId: String,
+    @PrimaryKey val psnId: String,
     val level: Int,
     val avatarURL: URL,
     val levelProgressPercent: Double,
