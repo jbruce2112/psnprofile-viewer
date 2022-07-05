@@ -38,7 +38,7 @@ class PSNProfileScraperImpl : PSNProfileScraper {
         val countryRank = doc.select("span.country-rank.stat a").firstOrNull()?.ownText()
 
         val gamesRows = doc.select("#gamesTable tr")
-        val games = gamesRows.map { parseGame(it, username) }
+        val games = gamesRows.mapNotNull { parseGame(it, username) }
 
         val profile = Profile(
             psnId = username,
@@ -95,7 +95,7 @@ class PSNProfileScraperImpl : PSNProfileScraper {
     }
 }
 
-private fun parseGame(game: Element, psnId: String): Game {
+private fun parseGame(game: Element, psnId: String): Game? {
     val name = game.select("a.title").text()
     val platform = if (game.select("span.tag.platform").size > 1) {
         game.select("span.tag.platform").joinToString(", ") { it.text() }
@@ -104,6 +104,9 @@ private fun parseGame(game: Element, psnId: String): Game {
     }
 
     val href = game.select("a.title").attr("href")
+    if (href.isBlank()) {
+        return null
+    }
     val hrefComponents = href.split("/").filter { it.isNotBlank() }
     val psnProfilesId = hrefComponents[1]
 

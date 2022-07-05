@@ -24,7 +24,7 @@ class TrophyListViewModel(
         Log.d("TrophyList", "initialized with gameId $gameId")
         viewModelScope.launch {
             async {
-                repository.trophies(gameId).collect {
+                repository.trophies(gameId)?.collect {
                     _trophies.value = it
                 }
             }

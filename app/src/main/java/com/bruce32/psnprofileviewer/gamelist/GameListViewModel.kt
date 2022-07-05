@@ -1,5 +1,6 @@
 package com.bruce32.psnprofileviewer.gamelist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
@@ -21,7 +22,8 @@ class GameListViewModel(
     init {
         viewModelScope.launch {
             async {
-                repository.games().collect {
+                repository.games()?.collect {
+                    Log.d("GameList", "Got update with ${it.size} games")
                     _games.value = it
                 }
             }

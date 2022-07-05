@@ -7,5 +7,6 @@ class PSNProfileViewerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ProfilePersistence.initialize(this)
+        UserSourceImpl.initialize(this)
     }
 }

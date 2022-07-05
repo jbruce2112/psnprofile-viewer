@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Database(
     entities = [Profile::class, Game::class, Trophy::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(ProfileTypeConverters::class)
@@ -24,13 +24,13 @@ abstract class ProfileDatabase : RoomDatabase() {
 
 @Dao
 interface ProfileDao {
-    @Query("SELECT * FROM profile WHERE psnId=(:psnId)")
+    @Query("SELECT * FROM profile WHERE psnId=(:psnId) COLLATE NOCASE")
     suspend fun getProfile(psnId: String): Profile
 
-    @Query("SELECT * FROM game WHERE playerPsnId=(:psnId)")
+    @Query("SELECT * FROM game WHERE playerPsnId=(:psnId) COLLATE NOCASE")
     fun getGames(psnId: String): Flow<List<Game>>
 
-    @Query("SELECT * FROM trophy WHERE gameId=(:gameId) AND playerPsnId=(:psnId)")
+    @Query("SELECT * FROM trophy WHERE gameId=(:gameId) AND playerPsnId=(:psnId) COLLATE NOCASE")
     fun getTrophies(gameId: String, psnId: String): Flow<List<Trophy>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
