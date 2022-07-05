@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/layout/fragment_game_list.xml" value="0.279833246482543" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.47331667726144855" />
+        <entry key="app/src/main/res/layout/fragment_switch_account.xml" value="0.3735524495442709" />
         <entry key="app/src/main/res/layout/fragment_trophy_list.xml" value="0.40989583333333335" />
         <entry key="app/src/main/res/layout/list_item_game.xml" value="0.4176666259765627" />
         <entry key="app/src/main/res/layout/list_item_trophy.xml" value="0.48420054117838535" />

@@ -12,10 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.application.UserSourceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import com.bruce32.psnprofileviewer.model.Game
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameListFragment() : Fragment() {
@@ -43,8 +41,6 @@ class GameListFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(300)
-            UserSourceImpl.get().setCurrentPsnId("jbruce2112")
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 refreshGameListAndObserve()
             }

@@ -19,12 +19,12 @@ class ProfileRepository(
     }
 
     suspend fun games() = userSource.currentPsnId()?.let {
-        Log.d("Profile", "fetch profile for $it")
+        Log.d("Repository", "fetch profile for $it")
         persistence.getGames(it)
     }
 
     suspend fun trophies(gameId: String) = userSource.currentPsnId()?.let {
-        Log.d("Profile", "fetch profile for $gameId by $it")
+        Log.d("Repository", "fetch profile for $gameId by $it")
         persistence.getTrophies(gameId, it)
     }
 

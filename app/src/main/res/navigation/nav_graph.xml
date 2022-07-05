@@ -27,4 +27,9 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
     </fragment>
+    <fragment
+        android:id="@+id/switchAccountFragment"
+        android:name="com.bruce32.psnprofileviewer.SwitchAccountFragment"
+        android:label="fragment_switch_account"
+        tools:layout="@layout/fragment_switch_account" />
 </navigation>
