@@ -30,6 +30,6 @@
     <fragment
         android:id="@+id/switchAccountFragment"
         android:name="com.bruce32.psnprofileviewer.SwitchAccountFragment"
-        android:label="fragment_switch_account"
+        android:label="Switch PSN Account"
         tools:layout="@layout/fragment_switch_account" />
 </navigation>

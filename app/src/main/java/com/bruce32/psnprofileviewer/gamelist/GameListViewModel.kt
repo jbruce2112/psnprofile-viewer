@@ -20,10 +20,12 @@ class GameListViewModel(
         get() = _games.asStateFlow()
 
     init {
+        Log.d("GameList", "ViewModel Created")
         viewModelScope.launch {
             async {
                 repository.games()?.collect {
-                    Log.d("GameList", "Got update with ${it.size} games")
+                    Log.d("GameListViewModel", "Got update with ${it.size} games")
+                    Log.d("GameListViewModel", it.map { it.name }.joinToString(","))
                     _games.value = it
                 }
             }
@@ -31,5 +33,10 @@ class GameListViewModel(
                 repository.refreshProfileAndGames()
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("GameList", "ViewModel Cleared")
     }
 }

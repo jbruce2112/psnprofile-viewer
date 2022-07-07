@@ -21,7 +21,9 @@ class ProfileViewModel(
     init {
         viewModelScope.launch {
             async {
-                _profile.value = repository.profile()
+                repository.profile()?.collect {
+                    _profile.value = it
+                }
             }
             async {
                 repository.refreshProfileAndGames()

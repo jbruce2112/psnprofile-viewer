@@ -39,9 +39,11 @@ class GameListFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("GameList", "onViewCreated")
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("GameList", "repeatingOnLifecycle STARTED")
                 refreshGameListAndObserve()
             }
         }
@@ -50,15 +52,18 @@ class GameListFragment() : Fragment() {
     private suspend fun refreshGameListAndObserve() {
         viewModel.games.collect {
             Log.d("GameList", "game list updated with ${it.size} games")
+            Log.d("GameList", it.map { it.name }.joinToString(","))
             reconfigureListAdapter(it)
         }
     }
 
     private fun reconfigureListAdapter(games: List<Game>) {
-        binding.listRecyclerView.adapter = GameListAdapter(games) { gameId ->
+        val adapter = GameListAdapter(games) { gameId ->
             findNavController().navigate(
                 GameListFragmentDirections.showTrophyList(gameId)
             )
         }
+        binding.listRecyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 }

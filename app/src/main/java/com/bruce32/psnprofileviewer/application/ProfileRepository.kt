@@ -9,50 +9,32 @@ import kotlinx.coroutines.withContext
 
 class ProfileRepository(
     private val service: PSNProfileService = PSNProfileServiceImpl(),
-    private val persistence: ProfilePersistence = ProfilePersistence.get(),
-    private val userSource: UserSource = UserSourceImpl.get()
+    private val persistence: ProfilePersistence = ProfilePersistence.get()
 ) {
 
-    suspend fun profile() = userSource.currentPsnId()?.let {
-        Log.d("Profile", "fetch profile for $it")
-        persistence.getProfile(it)
-    }
+    fun profile() = persistence.getProfile()
 
-    suspend fun games() = userSource.currentPsnId()?.let {
-        Log.d("Repository", "fetch profile for $it")
-        persistence.getGames(it)
-    }
+    fun games() = persistence.getGames()
 
-    suspend fun trophies(gameId: String) = userSource.currentPsnId()?.let {
-        Log.d("Repository", "fetch profile for $gameId by $it")
-        persistence.getTrophies(gameId, it)
-    }
+    fun trophies(gameId: String) = persistence.getTrophies(gameId)
 
     suspend fun refreshProfileAndGames() {
         withContext(Dispatchers.IO) {
-            val currentPsnId = userSource.currentPsnId()
-            currentPsnId?.let {
+            val userName = persistence.getCurrentUser()
+            userName?.let {
                 val result = service.profileAndGames(it)
                 Log.d("Repository", "Insert profile ${result.profile}")
-                try {
-                    persistence.insertProfile(result.profile)
-                } catch (exception: Exception) {
-                    Log.d("Repository", exception.toString())
-                }
+                persistence.insertProfile(result.profile)
                 Log.d("Repository", "Insert ${result.games.size} games ${result.games}")
-                try {
-                    persistence.insertGames(result.games)
-                } catch (exception: Exception) {
-                    Log.d("Repository", exception.toString())
-                }
+                persistence.insertGames(result.games)
             }
         }
     }
 
     suspend fun refreshTrophies(gameId: String) {
         withContext(Dispatchers.IO) {
-            val currentPsnId = userSource.currentPsnId()
-            currentPsnId?.let {
+            val userName = persistence.getCurrentUser()
+            userName?.let {
                 val gameDetails = service.gameDetails(gameId, it)
                 persistence.insertTrophies(gameDetails.trophies)
             }
