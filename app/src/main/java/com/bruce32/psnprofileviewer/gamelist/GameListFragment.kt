@@ -25,6 +25,7 @@ class GameListFragment() : Fragment() {
         get() = checkNotNull(_binding) {
             "Binding is null"
         }
+    private lateinit var adapter: GameListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,12 @@ class GameListFragment() : Fragment() {
     ): View? {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.listRecyclerView.adapter = GameListAdapter(emptyList()) { }
+        adapter = GameListAdapter(emptyList()) { gameId ->
+            findNavController().navigate(
+                GameListFragmentDirections.showTrophyList(gameId)
+            )
+        }
+        binding.listRecyclerView.adapter = adapter
         return binding.root
     }
 
@@ -43,7 +49,6 @@ class GameListFragment() : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d("GameList", "repeatingOnLifecycle STARTED")
                 refreshGameListAndObserve()
             }
         }
@@ -52,18 +57,12 @@ class GameListFragment() : Fragment() {
     private suspend fun refreshGameListAndObserve() {
         viewModel.games.collect {
             Log.d("GameList", "game list updated with ${it.size} games")
-            Log.d("GameList", it.map { it.name }.joinToString(","))
-            reconfigureListAdapter(it)
+            updateAdapter(it)
         }
     }
 
-    private fun reconfigureListAdapter(games: List<Game>) {
-        val adapter = GameListAdapter(games) { gameId ->
-            findNavController().navigate(
-                GameListFragmentDirections.showTrophyList(gameId)
-            )
-        }
-        binding.listRecyclerView.adapter = adapter
+    private fun updateAdapter(games: List<Game>) {
+        adapter.update(games)
         adapter.notifyDataSetChanged()
     }
 }

@@ -21,7 +21,7 @@ class ProfileViewModel(
     init {
         viewModelScope.launch {
             async {
-                repository.profile()?.collect {
+                repository.profile.collect {
                     _profile.value = it
                 }
             }

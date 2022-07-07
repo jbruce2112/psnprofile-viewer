@@ -12,9 +12,9 @@ class ProfileRepository(
     private val persistence: ProfilePersistence = ProfilePersistence.get()
 ) {
 
-    fun profile() = persistence.getProfile()
+    val profile = persistence.getProfile()
 
-    fun games() = persistence.getGames()
+    val games = persistence.getGames()
 
     fun trophies(gameId: String) = persistence.getTrophies(gameId)
 

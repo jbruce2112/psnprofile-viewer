@@ -23,9 +23,8 @@ class GameListViewModel(
         Log.d("GameList", "ViewModel Created")
         viewModelScope.launch {
             async {
-                repository.games()?.collect {
+                repository.games.collect {
                     Log.d("GameListViewModel", "Got update with ${it.size} games")
-                    Log.d("GameListViewModel", it.map { it.name }.joinToString(","))
                     _games.value = it
                 }
             }
