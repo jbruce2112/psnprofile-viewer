@@ -53,6 +53,9 @@ class SwitchAccountFragment(
                     val newId = binding.setPsnIdText.text.toString()
                     persistence.setCurrentUser(newId)
                     repository.refreshProfileAndGames()
+                    withContext(Dispatchers.Main) {
+                        activity?.onBackPressed()
+                    }
                 }
             }
         }
