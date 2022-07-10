@@ -25,6 +25,7 @@ class TrophyListFragment : Fragment() {
         get() = checkNotNull(_binding) {
             "Binding is null"
         }
+
     private val adapter = TrophyListAdapter(emptyList())
 
     override fun onCreateView(
@@ -45,5 +46,11 @@ class TrophyListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

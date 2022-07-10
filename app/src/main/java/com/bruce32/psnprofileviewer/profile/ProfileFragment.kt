@@ -55,4 +55,10 @@ class ProfileFragment : Fragment() {
         binding.countryRankValue.text = String.format("%,d", profile.countryRank)
         binding.levelValue.text = profile.level.toString()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
 }

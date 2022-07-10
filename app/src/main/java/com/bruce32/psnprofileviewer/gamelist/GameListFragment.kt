@@ -25,6 +25,7 @@ class GameListFragment() : Fragment() {
         get() = checkNotNull(_binding) {
             "Binding is null"
         }
+
     private lateinit var adapter: GameListAdapter
 
     override fun onCreateView(
@@ -64,5 +65,11 @@ class GameListFragment() : Fragment() {
     private fun updateAdapter(games: List<Game>) {
         adapter.update(games)
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }
