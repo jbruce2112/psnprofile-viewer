@@ -10,9 +10,10 @@ class GameHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewModel: GameViewModel, onClick: (href: String) -> Unit) {
-        binding.nameView.text = viewModel.title
-        binding.trophyView.text = viewModel.description
-        binding.completionView.text = viewModel.trailingText
+        binding.titleView.text = viewModel.title
+        binding.secondaryView.text = viewModel.secondary
+        binding.descriptionView.text = viewModel.description
+        binding.trailingView.text = viewModel.trailingText
 
         if (viewModel.highlighted) {
             binding.root.setBackgroundColor(material_dynamic_secondary0)
@@ -20,9 +21,9 @@ class GameHolder(
             binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
-        Glide.with(binding.coverImageView)
+        Glide.with(binding.imageView)
             .load(viewModel.leadingIconURL.toString())
-            .into(binding.coverImageView)
+            .into(binding.imageView)
 
         binding.root.setOnClickListener {
             onClick(viewModel.id)
