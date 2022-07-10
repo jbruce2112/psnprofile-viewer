@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,7 @@ class TrophyListFragment : Fragment() {
             "Binding is null"
         }
 
-    private val adapter = TrophyListAdapter(emptyList())
+    private val adapter = ListItemAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater,

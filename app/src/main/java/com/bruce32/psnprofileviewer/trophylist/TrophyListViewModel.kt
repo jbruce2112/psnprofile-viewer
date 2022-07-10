@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
-import com.bruce32.psnprofileviewer.model.Trophy
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,16 +15,16 @@ class TrophyListViewModel(
     private val gameId: String
 ) : ViewModel() {
 
-    private val _trophies: MutableStateFlow<List<Trophy>> = MutableStateFlow(emptyList())
-    val trophies: StateFlow<List<Trophy>>
+    private val _trophies: MutableStateFlow<List<TrophyViewModel>> = MutableStateFlow(emptyList())
+    val trophies: StateFlow<List<TrophyViewModel>>
         get() = _trophies.asStateFlow()
 
     init {
         Log.d("TrophyList", "initialized with gameId $gameId")
         viewModelScope.launch {
             async {
-                repository.trophies(gameId).collect {
-                    _trophies.value = it
+                repository.trophies(gameId).collect { trophies ->
+                    _trophies.value = trophies.map { TrophyViewModel(it) }
                 }
             }
             async {
