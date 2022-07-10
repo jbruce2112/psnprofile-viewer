@@ -56,14 +56,14 @@ class GameListFragment() : Fragment() {
     }
 
     private suspend fun refreshGameListAndObserve() {
-        viewModel.games.collect {
+        viewModel.items.collect {
             Log.d("GameList", "game list updated with ${it.size} games")
             updateAdapter(it)
         }
     }
 
-    private fun updateAdapter(games: List<Game>) {
-        adapter.update(games)
+    private fun updateAdapter(viewModels: List<GameViewModel>) {
+        adapter.update(viewModels)
         adapter.notifyDataSetChanged()
     }
 

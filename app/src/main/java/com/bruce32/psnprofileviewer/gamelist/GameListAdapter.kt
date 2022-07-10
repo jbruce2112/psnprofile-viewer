@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bruce32.psnprofileviewer.databinding.ListItemGameBinding
-import com.bruce32.psnprofileviewer.model.Game
 
 class GameListAdapter(
-    private var games: List<Game>,
+    private var gameViewModels: List<GameViewModel>,
     private val onClick: ((href: String) -> Unit)
 ) : RecyclerView.Adapter<GameHolder>() {
 
@@ -18,14 +17,14 @@ class GameListAdapter(
     }
 
     override fun onBindViewHolder(holder: GameHolder, position: Int) {
-        val game = games[position]
-        holder.bind(game, onClick)
+        val viewModel = gameViewModels[position]
+        holder.bind(viewModel, onClick)
     }
 
-    override fun getItemCount() = games.size
+    override fun getItemCount() = gameViewModels.size
 
-    fun update(games: List<Game>) {
-        this.games = games
+    fun update(gameViewModels: List<GameViewModel>) {
+        this.gameViewModels = gameViewModels
         notifyDataSetChanged()
     }
 }

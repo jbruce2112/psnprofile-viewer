@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
-import com.bruce32.psnprofileviewer.model.Game
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,27 +14,21 @@ class GameListViewModel(
     private val repository: ProfileRepository = ProfileRepository()
 ) : ViewModel() {
 
-    private val _games: MutableStateFlow<List<Game>> = MutableStateFlow(emptyList())
-    val games: StateFlow<List<Game>>
+    private val _games: MutableStateFlow<List<GameViewModel>> = MutableStateFlow(emptyList())
+    val items: StateFlow<List<GameViewModel>>
         get() = _games.asStateFlow()
 
     init {
-        Log.d("GameList", "ViewModel Created")
         viewModelScope.launch {
             async {
-                repository.games.collect {
-                    Log.d("GameListViewModel", "Got update with ${it.size} games")
-                    _games.value = it
+                repository.games.collect { games ->
+                    Log.d("GameListViewModel", "Got update with ${games.size} games")
+                    _games.value = games.map { GameViewModel(it) }
                 }
             }
             async {
                 repository.refreshProfileAndGames()
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("GameList", "ViewModel Cleared")
     }
 }
