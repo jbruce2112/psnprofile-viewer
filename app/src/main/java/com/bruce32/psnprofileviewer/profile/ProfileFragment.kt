@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
-import com.bruce32.psnprofileviewer.model.Profile
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
@@ -40,20 +39,20 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-    private fun bind(profile: Profile) {
+    private fun bind(viewModel: ProfileStatsViewModel) {
         Glide.with(binding.avatarImageView)
-            .load(profile.avatarURL.toString())
+            .load(viewModel.imageURL.toString())
             .into(binding.avatarImageView)
 
-        binding.userNameView.text = profile.psnId
-        binding.trophiesValue.text = "${profile.totalPlatinum} Platinum, ${profile.totalGold} Gold, ${profile.totalSilver} Silver, ${profile.totalBronze} Bronze"
-        binding.gamesPlayedValue.text = profile.gamesPlayed.toString()
-        binding.percentCompleteValue.text = "${profile.completionPercent}%"
-        binding.completedGamesValue.text = profile.completedGames.toString()
-        binding.unearnedTrophiesValue.text = profile.unearnedTrophies.toString()
-        binding.worldRankValue.text = String.format("%,d", profile.worldRank)
-        binding.countryRankValue.text = String.format("%,d", profile.countryRank)
-        binding.levelValue.text = profile.level.toString()
+        binding.userNameView.text = viewModel.id
+        binding.trophiesValue.text = viewModel.trophies
+        binding.gamesPlayedValue.text = viewModel.gamesPlayedValue
+        binding.percentCompleteValue.text = viewModel.percentCompleteValue
+        binding.completedGamesValue.text = viewModel.completedGamesValue
+        binding.unearnedTrophiesValue.text = viewModel.unearnedTrophiesValue
+        binding.worldRankValue.text = viewModel.worldRankValue
+        binding.countryRankValue.text = viewModel.countryRankValue
+        binding.levelValue.text = viewModel.levelValue
     }
 
     override fun onDestroyView() {
