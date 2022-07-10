@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
-import com.bruce32.psnprofileviewer.model.Game
 import kotlinx.coroutines.launch
 
 class GameListFragment() : Fragment() {
@@ -26,7 +26,7 @@ class GameListFragment() : Fragment() {
             "Binding is null"
         }
 
-    private lateinit var adapter: GameListAdapter
+    private lateinit var adapter: ListItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class GameListFragment() : Fragment() {
     ): View? {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = GameListAdapter(emptyList()) { gameId ->
+        adapter = ListItemAdapter(emptyList()) { gameId ->
             findNavController().navigate(
                 GameListFragmentDirections.showTrophyList(gameId)
             )

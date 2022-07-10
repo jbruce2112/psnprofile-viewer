@@ -6,4 +6,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:itemCount="20"
-    tools:listitem="@layout/list_item_game" />
+    tools:listitem="@layout/list_item_template" />
