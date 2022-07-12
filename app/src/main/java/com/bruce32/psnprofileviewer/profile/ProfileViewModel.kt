@@ -21,7 +21,11 @@ class ProfileViewModel(
         viewModelScope.launch {
             async {
                 repository.profile.collect {
-                    _profile.value = ProfileStatsViewModel(it)
+                    if (it == null) {
+                        _profile.value = null
+                    } else {
+                        _profile.value = ProfileStatsViewModel(it)
+                    }
                 }
             }
             async {

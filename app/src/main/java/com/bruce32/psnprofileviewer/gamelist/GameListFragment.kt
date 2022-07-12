@@ -14,9 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class GameListFragment() : Fragment() {
+class GameListFragment : Fragment() {
 
     private val viewModel: GameListViewModel by viewModels()
 
@@ -50,15 +51,29 @@ class GameListFragment() : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                refreshGameListAndObserve()
+                async { observeGameViewModelUpdate() }
+                async { observeMessageUpdates() }
             }
         }
     }
 
-    private suspend fun refreshGameListAndObserve() {
+    private suspend fun observeGameViewModelUpdate() {
         viewModel.items.collect {
             Log.d("GameList", "game list updated with ${it.size} games")
             updateAdapter(it)
+        }
+    }
+
+    private suspend fun observeMessageUpdates() {
+        viewModel.message.collect { message ->
+            binding.messageView.text = message
+            if (message == null) {
+                binding.listRecyclerView.visibility = View.VISIBLE
+                binding.messageView.visibility = View.GONE
+            } else {
+                binding.listRecyclerView.visibility = View.GONE
+                binding.messageView.visibility = View.VISIBLE
+            }
         }
     }
 

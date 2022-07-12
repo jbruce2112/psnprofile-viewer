@@ -26,7 +26,7 @@ abstract class ProfileDatabase : RoomDatabase() {
 @Dao
 interface ProfileDao {
     @Query("SELECT * FROM profile WHERE psnId=(SELECT psnId FROM currentUser) COLLATE NOCASE")
-    fun getProfile(): Flow<Profile>
+    fun getProfile(): Flow<Profile?>
 
     @Query("SELECT * FROM game WHERE playerPsnId=(SELECT psnId FROM currentUser) COLLATE NOCASE")
     fun getGames(): Flow<List<Game>>
@@ -45,6 +45,9 @@ interface ProfileDao {
 
     @Query("SELECT * from currentUser")
     fun getCurrentUser(): CurrentUser?
+
+    @Query("SELECT * from currentUser")
+    fun getCurrentUserFlow(): Flow<CurrentUser?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setCurrentUser(user: CurrentUser)

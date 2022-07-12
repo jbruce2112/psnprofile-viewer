@@ -46,5 +46,7 @@ class ProfilePersistence private constructor(context: Context) {
 
     fun getCurrentUser() = database.profileDao().getCurrentUser()?.psnId
 
+    fun getCurrentUserFlow() = database.profileDao().getCurrentUserFlow()
+
     suspend fun setCurrentUser(psnId: String) = database.profileDao().setCurrentUser(CurrentUser(psnId))
 }
