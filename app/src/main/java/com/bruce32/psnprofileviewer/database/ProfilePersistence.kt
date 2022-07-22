@@ -6,6 +6,8 @@ import com.bruce32.psnprofileviewer.model.CurrentUser
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.Profile
 import com.bruce32.psnprofileviewer.model.Trophy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ProfilePersistence private constructor(context: Context) {
 
@@ -38,15 +40,25 @@ class ProfilePersistence private constructor(context: Context) {
 
     fun getTrophies(gameId: String) = database.profileDao().getTrophies(gameId)
 
-    suspend fun insertProfile(profile: Profile) = database.profileDao().insertProfile(profile)
+    suspend fun insertProfile(profile: Profile) = withContext(Dispatchers.IO) {
+        database.profileDao().insertProfile(profile)
+    }
 
-    suspend fun insertGames(games: List<Game>) = database.profileDao().insertGames(games)
+    suspend fun insertGames(games: List<Game>) = withContext(Dispatchers.IO) {
+        database.profileDao().insertGames(games)
+    }
 
-    suspend fun insertTrophies(trophies: List<Trophy>) = database.profileDao().insertTrophies(trophies)
+    suspend fun insertTrophies(trophies: List<Trophy>) = withContext(Dispatchers.IO) {
+        database.profileDao().insertTrophies(trophies)
+    }
 
-    fun getCurrentUser() = database.profileDao().getCurrentUser()?.psnId
+    suspend fun getCurrentUser() = withContext(Dispatchers.IO) {
+        database.profileDao().getCurrentUser()?.psnId
+    }
 
     fun getCurrentUserFlow() = database.profileDao().getCurrentUserFlow()
 
-    suspend fun setCurrentUser(psnId: String) = database.profileDao().setCurrentUser(CurrentUser(psnId))
+    suspend fun setCurrentUser(psnId: String) = withContext(Dispatchers.IO) {
+        database.profileDao().setCurrentUser(CurrentUser(psnId))
+    }
 }

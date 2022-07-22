@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.databinding.FragmentSwitchAccountBinding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SwitchAccountFragment(
     private val persistence: ProfilePersistence = ProfilePersistence.get(),
@@ -37,27 +37,28 @@ class SwitchAccountFragment(
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val psnID = persistence.getCurrentUser()
-                psnID?.let {
-                    withContext(Dispatchers.Main) {
-                        binding.setPsnIdText.hint = it
-                    }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                updateTextHintWithCurrentUser()
+                binding.setIdButton.setOnClickListener {
+                    updateCurrentUserAndGoBack()
                 }
             }
         }
+    }
 
-        binding.setIdButton.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    val newId = binding.setPsnIdText.text.toString()
-                    persistence.setCurrentUser(newId)
-                    repository.refreshProfileAndGames()
-                    withContext(Dispatchers.Main) {
-                        activity?.onBackPressed()
-                    }
-                }
-            }
+    private suspend fun updateTextHintWithCurrentUser() {
+        val psnID = persistence.getCurrentUser()
+        psnID?.let {
+            binding.setPsnIdText.hint = it
+        }
+    }
+
+    private fun updateCurrentUserAndGoBack() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val newId = binding.setPsnIdText.text.toString()
+            persistence.setCurrentUser(newId)
+            repository.refreshProfileAndGames()
+            activity?.onBackPressed()
         }
     }
 
