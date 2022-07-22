@@ -40,6 +40,8 @@ class ProfilePersistence private constructor(context: Context) {
 
     fun getTrophies(gameId: String) = database.profileDao().getTrophies(gameId)
 
+    fun getCurrentUser() = database.profileDao().getCurrentUser()
+
     suspend fun insertProfile(profile: Profile) = withContext(Dispatchers.IO) {
         database.profileDao().insertProfile(profile)
     }
@@ -51,12 +53,6 @@ class ProfilePersistence private constructor(context: Context) {
     suspend fun insertTrophies(trophies: List<Trophy>) = withContext(Dispatchers.IO) {
         database.profileDao().insertTrophies(trophies)
     }
-
-    suspend fun getCurrentUser() = withContext(Dispatchers.IO) {
-        database.profileDao().getCurrentUser()?.psnId
-    }
-
-    fun getCurrentUserFlow() = database.profileDao().getCurrentUserFlow()
 
     suspend fun setCurrentUser(psnId: String) = withContext(Dispatchers.IO) {
         database.profileDao().setCurrentUser(CurrentUser(psnId))

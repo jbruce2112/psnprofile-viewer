@@ -4,6 +4,7 @@ import android.util.Log
 import com.bruce32.psnprofileviewer.api.PSNProfileService
 import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
+import kotlinx.coroutines.flow.first
 
 class ProfileRepository(
     private val service: PSNProfileService = PSNProfileServiceImpl(),
@@ -17,9 +18,9 @@ class ProfileRepository(
     fun trophies(gameId: String) = persistence.getTrophies(gameId)
 
     suspend fun refreshProfileAndGames() {
-        val userName = persistence.getCurrentUser()
-        userName?.let {
-            val result = service.profileAndGames(it)
+        val currentUser = persistence.getCurrentUser().first()
+        currentUser?.let {
+            val result = service.profileAndGames(it.psnId)
             Log.d("Repository", "Insert profile ${result.profile}")
             persistence.insertProfile(result.profile)
             Log.d("Repository", "Insert ${result.games.size} games ${result.games}")
@@ -28,9 +29,9 @@ class ProfileRepository(
     }
 
     suspend fun refreshTrophies(gameId: String) {
-        val userName = persistence.getCurrentUser()
+        val userName = persistence.getCurrentUser().first()
         userName?.let {
-            val gameDetails = service.gameDetails(gameId, it)
+            val gameDetails = service.gameDetails(gameId, it.psnId)
             persistence.insertTrophies(gameDetails.trophies)
         }
     }

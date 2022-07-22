@@ -33,8 +33,8 @@ class GameListViewModel(
                 }
             }
             async {
-                persistence.getCurrentUserFlow().collect { message ->
-                    if (message == null) {
+                persistence.getCurrentUser().collect { currentUser ->
+                    if (currentUser == null) {
                         _message.value =
                             "Please enter a PSN ID in the menu to see your progress."
                     } else {

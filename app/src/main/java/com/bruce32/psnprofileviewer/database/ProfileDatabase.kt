@@ -44,10 +44,7 @@ interface ProfileDao {
     suspend fun insertTrophies(trophies: List<Trophy>)
 
     @Query("SELECT * from currentUser")
-    fun getCurrentUser(): CurrentUser?
-
-    @Query("SELECT * from currentUser")
-    fun getCurrentUserFlow(): Flow<CurrentUser?>
+    fun getCurrentUser(): Flow<CurrentUser?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setCurrentUser(user: CurrentUser)

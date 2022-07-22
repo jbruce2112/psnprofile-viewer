@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.databinding.FragmentSwitchAccountBinding
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SwitchAccountFragment(
@@ -47,10 +48,8 @@ class SwitchAccountFragment(
     }
 
     private suspend fun updateTextHintWithCurrentUser() {
-        val psnID = persistence.getCurrentUser()
-        psnID?.let {
-            binding.setPsnIdText.hint = it
-        }
+        val currentUser = persistence.getCurrentUser().first()
+        binding.setPsnIdText.hint = currentUser?.psnId  ?: "PSN ID"
     }
 
     private fun updateCurrentUserAndGoBack() {
