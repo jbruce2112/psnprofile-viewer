@@ -12,10 +12,6 @@
         android:title="Profile" />
 
     <item
-        android:id="@+id/settings"
-        android:title="Settings" />
-
-    <item
         android:id="@+id/switchAccountFragment"
         android:title="Switch PSN Account" />
 
