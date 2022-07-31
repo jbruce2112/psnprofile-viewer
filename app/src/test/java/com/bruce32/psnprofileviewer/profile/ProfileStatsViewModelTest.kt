@@ -48,6 +48,14 @@ class ProfileStatsViewModelTest {
     }
 
     @Test
+    fun `percentCompleteValue is percentComplete with a padded zero when trailing digit is zero`() {
+        val viewModel = ProfileStatsViewModel(
+            profile = fakeProfile(completionPercent = 55.4)
+        )
+        assertEquals("55.40%", viewModel.percentCompleteValue)
+    }
+
+    @Test
     fun `completedGamesValue is completedGames`() {
         val viewModel = ProfileStatsViewModel(
             profile = fakeProfile(completedGames = 32)

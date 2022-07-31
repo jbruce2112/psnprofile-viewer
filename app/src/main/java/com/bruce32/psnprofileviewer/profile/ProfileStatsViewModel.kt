@@ -11,7 +11,7 @@ class ProfileStatsViewModel(
         "${it.first.withSeparator()} ${it.second}"
     }
     val gamesPlayedValue = profile.gamesPlayed.toString()
-    val percentCompleteValue = "${profile.completionPercent}%"
+    val percentCompleteValue = "${profile.completionPercent.padded()}%"
     val completedGamesValue = profile.completedGames.withSeparator()
     val unearnedTrophiesValue = profile.unearnedTrophies.withSeparator()
     val worldRankValue = profile.worldRank.withSeparator()
@@ -27,3 +27,4 @@ class ProfileStatsViewModel(
 }
 
 private fun Int.withSeparator() = String.format("%,d", this)
+private fun Double.padded() = String.format("%.2f", this)
