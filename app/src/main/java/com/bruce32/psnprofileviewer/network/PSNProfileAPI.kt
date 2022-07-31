@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer.api
+package com.bruce32.psnprofileviewer.network
 
 import retrofit2.http.GET
 import retrofit2.http.Path

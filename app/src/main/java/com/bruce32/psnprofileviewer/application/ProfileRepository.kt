@@ -1,8 +1,8 @@
 package com.bruce32.psnprofileviewer.application
 
 import android.util.Log
-import com.bruce32.psnprofileviewer.api.PSNProfileService
-import com.bruce32.psnprofileviewer.api.PSNProfileServiceImpl
+import com.bruce32.psnprofileviewer.network.PSNProfileService
+import com.bruce32.psnprofileviewer.network.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import kotlinx.coroutines.flow.first
 

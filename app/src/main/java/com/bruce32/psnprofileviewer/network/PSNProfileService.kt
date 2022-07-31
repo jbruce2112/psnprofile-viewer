@@ -1,4 +1,4 @@
-package com.bruce32.psnprofileviewer.api
+package com.bruce32.psnprofileviewer.network
 
 import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.ProfileWithGames
