@@ -12,10 +12,10 @@ class ProfileStatsViewModel(
     }
     val gamesPlayedValue = profile.gamesPlayed.toString()
     val percentCompleteValue = "${profile.completionPercent}%"
-    val completedGamesValue = profile.completedGames.toString()
-    val unearnedTrophiesValue = profile.unearnedTrophies.toString()
-    val worldRankValue = String.format("%,d", profile.worldRank)
-    val countryRankValue = String.format("%,d", profile.countryRank)
+    val completedGamesValue = profile.completedGames.withSeparator()
+    val unearnedTrophiesValue = profile.unearnedTrophies.withSeparator()
+    val worldRankValue = profile.worldRank.withSeparator()
+    val countryRankValue = profile.countryRank.withSeparator()
     val levelValue = profile.level.toString()
 
     private fun trophies() = listOf(

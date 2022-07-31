@@ -2,7 +2,6 @@ package com.bruce32.psnprofileviewer.gamelist
 
 import com.bruce32.psnprofileviewer.common.ListItemViewModel
 import com.bruce32.psnprofileviewer.model.Game
-import kotlin.math.roundToInt
 
 class GameViewModel(
     private val game: Game
@@ -16,7 +15,7 @@ class GameViewModel(
 
     override val leadingIconURL = game.coverURL
 
-    override val trailingText = "${game.completionPercent.roundToInt()}%"
+    override val trailingText = "${game.completionPercent.toInt()}%"
 
     override val highlighted = game.platinum == 1 || game.earnedTrophies == game.totalTrophies
 
