@@ -1,6 +1,5 @@
 package com.bruce32.psnprofileviewer.gamelist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
@@ -15,25 +14,29 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class GameListFragmentTest {
 
+    private lateinit var mockItemsFlow: MutableStateFlow<List<GameViewModel>>
     private lateinit var mockMessageFlow: MutableStateFlow<String?>
     private lateinit var mockViewModel: GameListViewModel
 
     private lateinit var scenario: FragmentScenario<GameListFragment>
 
-    @get:Rule
-    val coroutineRule = InstantTaskExecutorRule()
+    //@get:Rule
+    //val coroutineRule = InstantTaskExecutorRule()
 
     @Before
     fun setup() {
+        mockItemsFlow = MutableStateFlow(emptyList())
         mockMessageFlow = MutableStateFlow(null)
-        mockViewModel = mockk(relaxed = true, relaxUnitFun = true)
+        mockViewModel = mockk {
+            every { items } returns mockItemsFlow
+            every { message } returns mockMessageFlow
+        }
 
         val mockFactory: GameListViewModelFactory = mockk {
             every { create<GameListViewModel>(any(), any()) } returns mockViewModel
