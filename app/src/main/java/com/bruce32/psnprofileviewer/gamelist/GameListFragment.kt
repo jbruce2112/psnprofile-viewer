@@ -12,14 +12,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bruce32.psnprofileviewer.R
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class GameListFragment : Fragment() {
+class GameListFragment(
+    private val viewModelFactory: GameListViewModelFactory = GameListViewModelFactory()
+): Fragment() {
 
-    private val viewModel: GameListViewModel by viewModels()
+    private val viewModel: GameListViewModel by viewModels {
+        viewModelFactory
+    }
 
     private var _binding: FragmentGameListBinding? = null
     private val binding
@@ -41,6 +46,7 @@ class GameListFragment : Fragment() {
                 GameListFragmentDirections.showTrophyList(gameId)
             )
         }
+        binding.root.getViewById(R.id.messageView)
         binding.listRecyclerView.adapter = adapter
         return binding.root
     }
