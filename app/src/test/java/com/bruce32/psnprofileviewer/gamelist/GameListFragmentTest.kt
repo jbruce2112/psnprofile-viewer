@@ -33,10 +33,10 @@ class GameListFragmentTest {
     @Before
     fun setup() {
         mockMessageFlow = MutableStateFlow(null)
-        mockViewModel = mockk(relaxed = true)
+        mockViewModel = mockk(relaxed = true, relaxUnitFun = true)
 
         val mockFactory: GameListViewModelFactory = mockk {
-            every { create<GameListViewModel>(any()) } returns mockViewModel
+            every { create<GameListViewModel>(any(), any()) } returns mockViewModel
         }
         scenario = launchFragmentInContainer(initialState = Lifecycle.State.CREATED) {
             GameListFragment(mockFactory)
