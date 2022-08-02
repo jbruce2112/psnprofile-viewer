@@ -1,14 +1,14 @@
 package com.bruce32.psnprofileviewer.application
 
 import android.util.Log
-import com.bruce32.psnprofileviewer.network.PSNProfileService
-import com.bruce32.psnprofileviewer.network.PSNProfileServiceImpl
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
+import com.bruce32.psnprofileviewer.network.PSNProfileService
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class ProfileRepository(
-    private val service: PSNProfileService = PSNProfileServiceImpl(),
-    private val persistence: ProfilePersistence = ProfilePersistence.get()
+class ProfileRepository @Inject constructor(
+    private val service: PSNProfileService,
+    private val persistence: ProfilePersistence
 ) {
 
     val profile = persistence.getProfile()

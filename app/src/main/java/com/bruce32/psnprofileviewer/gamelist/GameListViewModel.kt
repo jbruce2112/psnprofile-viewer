@@ -5,15 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameListViewModel(
-    private val repository: ProfileRepository = ProfileRepository(),
-    private val persistence: ProfilePersistence = ProfilePersistence.get()
+@HiltViewModel
+class GameListViewModel @Inject constructor(
+    private val repository: ProfileRepository,
+    private val persistence: ProfilePersistence
 ) : ViewModel() {
 
     private val _games: MutableStateFlow<List<GameViewModel>> = MutableStateFlow(emptyList())

@@ -3,14 +3,17 @@ package com.bruce32.psnprofileviewer.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel(
-    private val repository: ProfileRepository = ProfileRepository()
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val repository: ProfileRepository
 ) : ViewModel() {
 
     private val _profile: MutableStateFlow<ProfileStatsViewModel?> = MutableStateFlow(null)

@@ -7,14 +7,15 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
+import javax.inject.Inject
 
 interface PSNProfileService {
     suspend fun profileAndGames(userName: String): ProfileWithGames
     suspend fun gameDetails(gameId: String, userName: String): GameDetails
 }
 
-class PSNProfileServiceImpl(
-    private val scraper: PSNProfileScraper = PSNProfileScraperImpl()
+class PSNProfileServiceImpl @Inject constructor(
+    private val scraper: PSNProfileScraper
 ) : PSNProfileService {
 
     private val retrofit = Retrofit.Builder()

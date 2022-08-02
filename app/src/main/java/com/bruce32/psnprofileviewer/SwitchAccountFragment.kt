@@ -11,13 +11,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.databinding.FragmentSwitchAccountBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SwitchAccountFragment(
-    private val persistence: ProfilePersistence = ProfilePersistence.get(),
-    private val repository: ProfileRepository = ProfileRepository()
-) : Fragment() {
+@AndroidEntryPoint
+class SwitchAccountFragment : Fragment() {
+
+    @Inject lateinit var persistence: ProfilePersistence
+    @Inject lateinit var repository: ProfileRepository
 
     private var _binding: FragmentSwitchAccountBinding? = null
     private val binding

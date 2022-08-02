@@ -8,13 +8,14 @@ import com.bruce32.psnprofileviewer.model.Trophy
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.net.URL
+import javax.inject.Inject
 
 interface PSNProfileScraper {
     fun profileWithGames(html: String): ProfileWithGames
     fun gameDetails(html: String, gameId: String, psnId: String): GameDetails
 }
 
-class PSNProfileScraperImpl : PSNProfileScraper {
+class PSNProfileScraperImpl @Inject constructor(): PSNProfileScraper {
 
     override fun profileWithGames(html: String): ProfileWithGames {
         val doc = Jsoup.parse(html)

@@ -1,11 +1,7 @@
 package com.bruce32.psnprofileviewer.application
 
 import android.app.Application
-import com.bruce32.psnprofileviewer.database.ProfilePersistence
+import dagger.hilt.android.HiltAndroidApp
 
-class PSNProfileViewerApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        ProfilePersistence.initialize(this)
-    }
-}
+@HiltAndroidApp
+class PSNProfileViewerApplication : Application()

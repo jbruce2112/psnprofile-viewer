@@ -12,13 +12,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TrophyListFragment : Fragment() {
+
+    @Inject lateinit var assistedFactory: TrophyListViewModelAssistedFactory
 
     private val args: TrophyListFragmentArgs by navArgs()
     private val viewModel: TrophyListViewModel by viewModels {
-        TrophyListViewModelFactory(args.gameId)
+        TrophyListViewModel.provideFactory(assistedFactory, args.gameId)
     }
 
     private var _binding: FragmentTrophyListBinding? = null

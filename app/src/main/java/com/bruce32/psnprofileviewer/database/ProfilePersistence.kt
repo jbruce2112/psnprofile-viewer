@@ -9,7 +9,7 @@ import com.bruce32.psnprofileviewer.model.Trophy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ProfilePersistence private constructor(context: Context) {
+class ProfilePersistence(context: Context) {
 
     private val database: ProfileDatabase = Room
         .databaseBuilder(
@@ -19,20 +19,6 @@ class ProfilePersistence private constructor(context: Context) {
         )
         .fallbackToDestructiveMigration()
         .build()
-
-    companion object {
-        private var instance: ProfilePersistence? = null
-
-        fun initialize(context: Context) {
-            if (instance == null) {
-                instance = ProfilePersistence(context)
-            }
-        }
-
-        fun get() = checkNotNull(instance) {
-            "ProfilePersistence must be initialized"
-        }
-    }
 
     fun getProfile() = database.profileDao().getProfile()
 
