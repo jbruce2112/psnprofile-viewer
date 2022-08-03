@@ -18,12 +18,13 @@ class PSNProfileServiceImpl(
     private val scraper: PSNProfileScraper = PSNProfileScraperImpl()
 ) : PSNProfileService {
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://psnprofiles.com/")
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .build()
-
-    private val psnProfileApi = retrofit.create<PSNProfileAPI>()
+    private val psnProfileApi: PSNProfileAPI by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://psnprofiles.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+            .create()
+    }
 
     override suspend fun profileAndGames(userName: String) = withContext(Dispatchers.IO) {
         try {

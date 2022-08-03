@@ -14,11 +14,13 @@ import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
-class TrophyListFragment : Fragment() {
+class TrophyListFragment(
+    private val viewModelFactoryProvider: TrophyListViewModelFactoryProvider = TrophyListViewModelFactoryProviderImpl()
+) : Fragment() {
 
     private val args: TrophyListFragmentArgs by navArgs()
     private val viewModel: TrophyListViewModel by viewModels {
-        TrophyListViewModelFactory(args.gameId)
+        viewModelFactoryProvider.factory(args.gameId)
     }
 
     private var _binding: FragmentTrophyListBinding? = null
