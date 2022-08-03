@@ -46,13 +46,15 @@ class ProfileFragment : Fragment() {
 
         binding.userNameView.text = viewModel.id
         binding.trophiesValue.text = viewModel.trophies
-        binding.gamesPlayedValue.text = viewModel.gamesPlayedValue
-        binding.percentCompleteValue.text = viewModel.percentCompleteValue
-        binding.completedGamesValue.text = viewModel.completedGamesValue
-        binding.unearnedTrophiesValue.text = viewModel.unearnedTrophiesValue
-        binding.worldRankValue.text = viewModel.worldRankValue
-        binding.countryRankValue.text = viewModel.countryRankValue
-        binding.levelValue.text = viewModel.levelValue
+
+        val linearLayout = binding.statsLayout
+        linearLayout.removeAllViews()
+
+        viewModel.stats.forEach {
+            val view = ProfileStatItemView(requireContext())
+            view.viewModel = it
+            linearLayout.addView(view)
+        }
     }
 
     override fun onDestroyView() {

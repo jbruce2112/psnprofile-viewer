@@ -10,13 +10,16 @@ class ProfileStatsViewModel(
     val trophies = trophies().joinToString(", ") {
         "${it.first.withSeparator()} ${it.second}"
     }
-    val gamesPlayedValue = profile.gamesPlayed.toString()
-    val percentCompleteValue = "${profile.completionPercent.padded()}%"
-    val completedGamesValue = profile.completedGames.withSeparator()
-    val unearnedTrophiesValue = profile.unearnedTrophies.withSeparator()
-    val worldRankValue = profile.worldRank.withSeparator()
-    val countryRankValue = profile.countryRank.withSeparator()
-    val levelValue = profile.level.toString()
+
+    val stats = listOf(
+        ProfileStatViewModel(profile.gamesPlayed.toString(), "Games Played"),
+        ProfileStatViewModel("${profile.completionPercent.padded()}%", "Overall Completion"),
+        ProfileStatViewModel(profile.completedGames.withSeparator(), "Completed Games"),
+        ProfileStatViewModel(profile.unearnedTrophies.withSeparator(), "Unearned Trophies"),
+        ProfileStatViewModel(profile.worldRank.withSeparator(), "World Rank"),
+        ProfileStatViewModel(profile.countryRank.withSeparator(), "Country Rank"),
+        ProfileStatViewModel(profile.level.toString(), "PSN Level")
+    )
 
     private fun trophies() = listOf(
         Pair(profile.totalPlatinum, "Platinum"),
@@ -25,6 +28,11 @@ class ProfileStatsViewModel(
         Pair(profile.totalBronze, "Bronze")
     )
 }
+
+data class ProfileStatViewModel(
+    val value: String,
+    val label: String
+)
 
 private fun Int.withSeparator() = String.format("%,d", this)
 private fun Double.padded() = String.format("%.2f", this)
