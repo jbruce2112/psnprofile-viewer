@@ -17,8 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +38,7 @@ class GameListViewModelTest {
 
     @Before
     fun setup() {
-        mockGameFlow = MutableStateFlow(emptyList())
+        mockGameFlow = MutableStateFlow(listOf(fakeGame("1234")))
         mockRepository = mockk {
             every { games } returns mockGameFlow.asStateFlow()
             coEvery { refreshProfileAndGames() } returns Unit
@@ -60,28 +58,19 @@ class GameListViewModelTest {
     }
 
     @Test
-    fun `message is null when currentUser is not null from persistence`() {
+    fun `update type is empty with no games message when no games found and currentUser is not null`() {
         runBlocking { mockCurrentUserFlow.emit(CurrentUser("1234")) }
-        val message = runBlocking { viewModel.message.first() }
-        assertNull(message)
+        runBlocking { mockGameFlow.emit(emptyList()) }
+        val update = runBlocking { viewModel.items.first() } as? GameListUpdate.Empty
+        assertEquals("Couldn't find any games for 1234 on PSNProfiles.com", update?.message)
     }
 
     @Test
-    fun `message is 'Please enter PSN ID' when currentUser null from persistence`() {
+    fun `update type is empty with 'Please enter PSN ID' message when no games found and currentUser is null`() {
         runBlocking { mockCurrentUserFlow.emit(null) }
-        val message = runBlocking { viewModel.message.first() }
-        assertEquals("Please enter a PSN ID in the menu to see your progress.", message)
-    }
-
-    @Test
-    fun `message is updated to null once user logs in`() {
-        runBlocking { mockCurrentUserFlow.emit(null) }
-        val messageBeforeUserLogsIn = runBlocking { viewModel.message.first() }
-        runBlocking { mockCurrentUserFlow.emit(CurrentUser("1234")) }
-        val messageAfterUserLogsIn = runBlocking { viewModel.message.first() }
-
-        assertNotNull(messageBeforeUserLogsIn)
-        assertNull(messageAfterUserLogsIn)
+        runBlocking { mockGameFlow.emit(emptyList()) }
+        val update = runBlocking { viewModel.items.first() } as? GameListUpdate.Empty
+        assertEquals("Please enter a PSN ID in the menu to see your progress.", update?.message)
     }
 
     @Test
@@ -100,11 +89,11 @@ class GameListViewModelTest {
                 )
             )
         }
-        val itemViewModels = runBlocking { viewModel.items.first() }
-        assertEquals(3, itemViewModels.size)
-        assertEquals("game1", itemViewModels[0].id)
-        assertEquals("game2", itemViewModels[1].id)
-        assertEquals("game3", itemViewModels[2].id)
+        val update = runBlocking { viewModel.items.first() } as? GameListUpdate.Items
+        assertEquals(3, update?.viewModels?.size)
+        assertEquals("game1", update?.viewModels?.get(0)?.id)
+        assertEquals("game2", update?.viewModels?.get(1)?.id)
+        assertEquals("game3", update?.viewModels?.get(2)?.id)
     }
 }
 

@@ -52,34 +52,30 @@ class GameListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 async { observeGameViewModelUpdate() }
-                async { observeMessageUpdates() }
             }
         }
     }
 
     private suspend fun observeGameViewModelUpdate() {
         viewModel.items.collect {
-            Log.d("GameList", "game list updated with ${it.size} games")
-            updateAdapter(it)
-        }
-    }
-
-    private suspend fun observeMessageUpdates() {
-        viewModel.message.collect { message ->
-            binding.messageView.text = message
-            if (message == null) {
-                binding.listRecyclerView.visibility = View.VISIBLE
-                binding.messageView.visibility = View.GONE
-            } else {
-                binding.listRecyclerView.visibility = View.GONE
-                binding.messageView.visibility = View.VISIBLE
+            when (it) {
+                is GameListUpdate.Empty -> setMessageAndHideRecyclerView(it.message)
+                is GameListUpdate.Items -> updateAdapterAndHideMessage(it.viewModels)
             }
         }
     }
 
-    private fun updateAdapter(viewModels: List<GameViewModel>) {
+    private fun setMessageAndHideRecyclerView(message: String) {
+        binding.messageView.text = message
+        binding.listRecyclerView.visibility = View.GONE
+        binding.messageView.visibility = View.VISIBLE
+    }
+
+    private fun updateAdapterAndHideMessage(viewModels: List<GameViewModel>) {
+        Log.d("GameList", "game list updated with ${viewModels.size} games")
         adapter.update(viewModels)
-        adapter.notifyDataSetChanged()
+        binding.listRecyclerView.visibility = View.VISIBLE
+        binding.messageView.visibility = View.GONE
     }
 
     override fun onDestroyView() {
