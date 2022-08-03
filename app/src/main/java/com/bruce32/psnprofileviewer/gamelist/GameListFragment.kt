@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class GameListFragment(
@@ -52,11 +51,10 @@ class GameListFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("GameList", "onViewCreated")
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                async { observeGameViewModelUpdate() }
+                observeGameViewModelUpdate()
             }
         }
     }

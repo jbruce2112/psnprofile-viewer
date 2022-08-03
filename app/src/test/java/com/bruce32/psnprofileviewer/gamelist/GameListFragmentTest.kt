@@ -3,6 +3,8 @@ package com.bruce32.psnprofileviewer.gamelist
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -11,6 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.R
+import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.model.Game
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.net.URL
 
 @RunWith(AndroidJUnit4::class)
 class GameListFragmentTest {
@@ -81,4 +86,58 @@ class GameListFragmentTest {
 
         onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
+
+    @Test
+    fun `update is called on recyclerView's ListItemAdapter adapter with result from update of type Items`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.onFragment { fragment ->
+            val adapter = fragment.view?.findViewById<RecyclerView>(R.id.list_recycler_view)?.adapter as? ListItemAdapter
+
+            val itemsBeforeUpdate = adapter?.itemCount
+            val oneViewModel = listOf(GameViewModel(fakeGame("someGame")))
+            runBlocking { mockItemsFlow.emit(GameListUpdate.Items(oneViewModel)) }
+            val itemsAfterUpdate = adapter?.itemCount
+
+            assert(itemsBeforeUpdate == 0)
+            assert(itemsAfterUpdate == 1)
+        }
+    }
+
+    @Test
+    fun `recyclerView's layoutManager is of type linearLayoutManager`() {
+        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.onFragment { fragment ->
+            val layoutManager = fragment.view?.findViewById<RecyclerView>(R.id.list_recycler_view)?.layoutManager
+            assert(layoutManager is LinearLayoutManager)
+        }
+    }
 }
+
+private fun fakeGame(
+    name: String = "someName",
+    coverURL: URL = URL("https://www.psnprofiles.com"),
+    platform: String = "somePlatform",
+    platinum: Int? = null,
+    id: String = "someGameId",
+    gold: Int = 0,
+    silver: Int = 0,
+    bronze: Int = 0,
+    completionPercent: Double = 0.0,
+    earnedTrophies: Int = 0,
+    totalTrophies: Int = 0,
+    playerPsnId: String = ""
+) = Game(
+    name = name,
+    coverURL = coverURL,
+    platform = platform,
+    platinum = platinum,
+    id = id,
+    gold = gold,
+    silver = silver,
+    bronze = bronze,
+    completionPercent = completionPercent,
+    earnedTrophies = earnedTrophies,
+    totalTrophies = totalTrophies,
+    playerPsnId = playerPsnId
+)
