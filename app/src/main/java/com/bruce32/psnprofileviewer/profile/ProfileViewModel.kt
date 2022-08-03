@@ -24,7 +24,7 @@ class ProfileViewModel(
                     if (it == null) {
                         _profile.value = null
                     } else {
-                        _profile.value = ProfileStatsViewModel(it)
+                        _profile.value = ProfileStatsViewModelImpl(it)
                     }
                 }
             }

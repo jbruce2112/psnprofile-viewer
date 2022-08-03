@@ -3,16 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.24375" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.7453262329101562" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/layout/fragment_game_list.xml" value="0.279833246482543" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.47331667726144855" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.35837527101144856" />
         <entry key="app/src/main/res/layout/fragment_switch_account.xml" value="0.3735524495442709" />
         <entry key="app/src/main/res/layout/fragment_trophy_list.xml" value="0.40989583333333335" />
         <entry key="app/src/main/res/layout/list_item_game.xml" value="0.6194331983805668" />
         <entry key="app/src/main/res/layout/list_item_template.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/list_item_trophy.xml" value="0.48420054117838535" />
+        <entry key="app/src/main/res/layout/profile_stat_item.xml" value="0.37447916666666664" />
+        <entry key="app/src/main/res/layout/stat_item_profile.xml" value="0.37447916666666664" />
         <entry key="app/src/main/res/menu/navigation_menu.xml" value="0.34270833333333334" />
       </map>
     </option>
