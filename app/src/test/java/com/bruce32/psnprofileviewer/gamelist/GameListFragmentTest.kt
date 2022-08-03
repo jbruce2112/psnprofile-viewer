@@ -26,9 +26,6 @@ class GameListFragmentTest {
 
     private lateinit var scenario: FragmentScenario<GameListFragment>
 
-    //@get:Rule
-    //val coroutineRule = InstantTaskExecutorRule()
-
     @Before
     fun setup() {
         mockItemsFlow = MutableStateFlow(emptyList())
