@@ -5,6 +5,8 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,19 +22,16 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GameListFragmentTest {
 
-    private lateinit var mockItemsFlow: MutableStateFlow<List<GameViewModel>>
-    private lateinit var mockMessageFlow: MutableStateFlow<String?>
+    private lateinit var mockItemsFlow: MutableStateFlow<GameListUpdate>
     private lateinit var mockViewModel: GameListViewModel
 
     private lateinit var scenario: FragmentScenario<GameListFragment>
 
     @Before
     fun setup() {
-        mockItemsFlow = MutableStateFlow(emptyList())
-        mockMessageFlow = MutableStateFlow(null)
+        mockItemsFlow = MutableStateFlow(GameListUpdate.Empty(""))
         mockViewModel = mockk {
             every { items } returns mockItemsFlow
-            every { message } returns mockMessageFlow
         }
 
         val mockFactory: GameListViewModelFactory = mockk {
@@ -44,10 +43,42 @@ class GameListFragmentTest {
     }
 
     @Test
-    fun `messageView has text updated to value emitted from viewModel flow`() {
-        runBlocking { mockMessageFlow.emit("Some Message For The UI") }
+    fun `messageView has text updated to message emitted from update of type Empty`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Empty("Some Message For The UI")) }
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.messageView)).check(matches(withText("Some Message For The UI")))
+    }
+
+    @Test
+    fun `messageView is set to GONE when update is emitted of type Items`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.messageView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `messageView is set to VISIBLE when update is emitted of type Empty`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Empty("")) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.messageView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun `recyclerView is set to GONE when update is emitted of type Empty`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Empty("")) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `recyclerView is set to VISIBLE when update is emitted of type Items`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 }
