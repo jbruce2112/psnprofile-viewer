@@ -7,7 +7,7 @@ import com.bruce32.psnprofileviewer.databinding.ListItemTemplateBinding
 
 class ListItemAdapter(
     private var itemViewModels: List<ListItemViewModel>,
-    private val onClick: ((href: String) -> Unit)? = null
+    private val onClick: ((itemId: String) -> Unit)? = null
 ) : RecyclerView.Adapter<ListItemHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemHolder {
