@@ -7,13 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bruce32.psnprofileviewer.common.GlideImageLoader
+import com.bruce32.psnprofileviewer.common.ImageLoader
 import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment() {
+class ProfileFragment(
+    private val viewModelFactory: ProfileViewModelFactory = ProfileViewModelFactory(),
+    private val imageLoader: ImageLoader = GlideImageLoader()
+) : Fragment() {
 
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by viewModels {
+        viewModelFactory
+    }
 
     private var _binding: FragmentProfileBinding? = null
     private val binding
@@ -40,26 +46,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun bind(viewModel: ProfileStatsViewModel) {
-        Glide.with(binding.avatarImageView)
-            .load(viewModel.imageURL.toString())
-            .into(binding.avatarImageView)
+        imageLoader.load(
+            url = viewModel.imageURL,
+            view = binding.headingImageView
+        )
 
-        binding.userNameView.text = viewModel.id
-        binding.trophiesValue.text = viewModel.trophies
+        binding.headingView.text = viewModel.heading
+        binding.subheadingView.text = viewModel.subheading
 
         val linearLayout = binding.statsLayout
         linearLayout.removeAllViews()
 
-        viewModel.stats.forEach {
+        viewModel.stats.forEach { statViewModel ->
             val view = ProfileStatItemView(requireContext())
-            view.viewModel = it
+            view.viewModel = statViewModel
             linearLayout.addView(view)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 }

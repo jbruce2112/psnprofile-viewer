@@ -2,11 +2,11 @@ package com.bruce32.psnprofileviewer.common
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bruce32.psnprofileviewer.databinding.ListItemTemplateBinding
-import com.bumptech.glide.Glide
 import com.google.android.material.R.color.material_dynamic_secondary0
 
 class ListItemHolder(
-    private val binding: ListItemTemplateBinding
+    private val binding: ListItemTemplateBinding,
+    private val imageLoader: ImageLoader = GlideImageLoader()
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewModel: ListItemViewModel, onClick: ((href: String) -> Unit)? = null) {
@@ -21,9 +21,10 @@ class ListItemHolder(
             binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
-        Glide.with(binding.imageView)
-            .load(viewModel.leadingIconURL.toString())
-            .into(binding.imageView)
+        imageLoader.load(
+            url = viewModel.leadingIconURL,
+            view = binding.imageView
+        )
 
         viewModel.id?.let { viewModelId ->
             binding.root.setOnClickListener {

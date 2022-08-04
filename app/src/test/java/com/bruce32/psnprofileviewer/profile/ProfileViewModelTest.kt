@@ -69,7 +69,7 @@ class ProfileViewModelTest {
         }
 
         val statsViewModel = runBlocking { viewModel.profile.first() }
-        assertEquals("myPsnId", statsViewModel?.id)
+        assertEquals("myPsnId", statsViewModel?.heading)
     }
 
     @Test
