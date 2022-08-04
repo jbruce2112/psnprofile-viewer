@@ -9,7 +9,7 @@ class ListItemHolder(
     private val imageLoader: ImageLoader = GlideImageLoader()
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(viewModel: ListItemViewModel, onClick: ((href: String) -> Unit)? = null) {
+    fun bind(viewModel: ListItemViewModel, onClick: ((itemId: String) -> Unit)? = null) {
         binding.titleView.text = viewModel.title
         binding.secondaryView.text = viewModel.secondary
         binding.descriptionView.text = viewModel.description
