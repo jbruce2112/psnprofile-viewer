@@ -1,5 +1,6 @@
 package com.bruce32.psnprofileviewer.profile
 
+import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.Profile
 import org.junit.Assert.assertEquals
 import org.junit.Test
