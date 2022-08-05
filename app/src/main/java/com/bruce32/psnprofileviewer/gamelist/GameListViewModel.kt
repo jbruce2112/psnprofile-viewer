@@ -1,8 +1,11 @@
 package com.bruce32.psnprofileviewer.gamelist
 
+import android.content.Context
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bruce32.psnprofileviewer.R
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.model.Game
@@ -18,9 +21,17 @@ sealed class GameListUpdate {
     class Items(val viewModels: List<GameViewModel>): GameListUpdate()
 }
 
+class StringSource(
+    private val context: Context
+) {
+    fun getString(@StringRes resId: Int) = context.getString(resId)
+    fun getString(@StringRes resId: Int, vararg args: Any) = context.getString(resId, *args)
+}
+
 class GameListViewModel(
     private val repository: ProfileRepository = ProfileRepository(),
-    private val persistence: ProfilePersistence = ProfilePersistence.get()
+    private val persistence: ProfilePersistence = ProfilePersistence.get(),
+    private val stringSource: StringSource
 ) : ViewModel() {
 
     private val _games: MutableStateFlow<GameListUpdate> = MutableStateFlow(GameListUpdate.Empty(""))
@@ -53,9 +64,9 @@ class GameListViewModel(
     private suspend fun createEmptyState(): GameListUpdate {
         val userId = persistence.getCurrentUser().first()?.psnId
         return if (userId == null) {
-            GameListUpdate.Empty("Please enter a PSN ID in the menu to see your progress.")
+            GameListUpdate.Empty(stringSource.getString(R.string.sign_in_text))
         } else {
-            GameListUpdate.Empty("Couldn't find any games for $userId on PSNProfiles.com")
+            GameListUpdate.Empty(stringSource.getString(R.string.no_games_found, userId))
         }
     }
 }

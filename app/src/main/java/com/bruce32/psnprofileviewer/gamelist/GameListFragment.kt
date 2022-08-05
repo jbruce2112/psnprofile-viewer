@@ -17,11 +17,11 @@ import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import kotlinx.coroutines.launch
 
 class GameListFragment(
-    private val viewModelFactory: GameListViewModelFactory = GameListViewModelFactory()
+    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySource()
 ): Fragment() {
 
     private val viewModel: GameListViewModel by viewModels {
-        viewModelFactory
+        viewModelFactorySource.factory(requireContext())
     }
 
     private var _binding: FragmentGameListBinding? = null
