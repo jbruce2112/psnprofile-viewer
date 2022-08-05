@@ -60,6 +60,62 @@ class PSNProfileScraperImpl : PSNProfileScraper {
         )
     }
 
+    private fun parseGame(game: Element, psnId: String): Game? {
+        val name = game.select("a.title").text()
+        val platform = if (game.select("span.tag.platform").size > 1) {
+            game.select("span.tag.platform").joinToString(", ") { it.text() }
+        } else {
+            game.select("span.tag.platform").text()
+        }
+
+        val href = game.select("a.title").attr("href")
+        if (href.isBlank()) {
+            return null
+        }
+        val hrefComponents = href.split("/").filter { it.isNotBlank() }
+        val psnProfilesId = hrefComponents.getOrNull(1) ?: return null
+
+        val coverURL = game.select("picture.game img").attr("src")
+
+        val platinumClass = game.select("img.icon-sprite").attr("class")
+        val platinum = if (platinumClass[12] == 'c') {
+            null
+        } else if (platinumClass.endsWith("earned")) {
+            1
+        } else {
+            0
+        }
+
+        val completionNode = game.select("div.trophy-count div span")
+
+        val gold = completionNode[1].text()
+        val silver = completionNode[3].text()
+        val bronze = completionNode[5].text()
+        val completionPercent = completionNode[6].text().replace("%", "")
+
+        val earnedTrophies = game.select("div.small-info b")[0].text()
+        val gameTotalTrophies = if (game.select("div.small-info")[0].text().startsWith("All")) {
+            earnedTrophies
+        } else {
+            game.select("div.small-info b")[1].text()
+        }
+
+        return Game(
+            name = name,
+            coverURL = URL(coverURL),
+            platform = platform,
+            platinum = platinum,
+            id = psnProfilesId,
+            gold = gold.toIntOrZero(),
+            silver = silver.toIntOrZero(),
+            bronze = bronze.toIntOrZero(),
+            completionPercent = completionPercent.toDoubleOrZero(),
+            earnedTrophies = earnedTrophies.toIntOrZero(),
+            totalTrophies = gameTotalTrophies.toIntOrZero(),
+            playerPsnId = psnId
+        )
+    }
+
     override fun gameDetails(html: String, gameId: String, psnId: String): GameDetails {
         val doc = Jsoup.parse(html)
 
@@ -88,62 +144,6 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             playerPsnId = psnId
         )
     }
-}
-
-private fun parseGame(game: Element, psnId: String): Game? {
-    val name = game.select("a.title").text()
-    val platform = if (game.select("span.tag.platform").size > 1) {
-        game.select("span.tag.platform").joinToString(", ") { it.text() }
-    } else {
-        game.select("span.tag.platform").text()
-    }
-
-    val href = game.select("a.title").attr("href")
-    if (href.isBlank()) {
-        return null
-    }
-    val hrefComponents = href.split("/").filter { it.isNotBlank() }
-    val psnProfilesId = hrefComponents[1]
-
-    val coverURL = game.select("picture.game img").attr("src")
-
-    val platinumClass = game.select("img.icon-sprite").attr("class")
-    val platinum = if (platinumClass[12] == 'c') {
-        null
-    } else if (platinumClass.endsWith("earned")) {
-        1
-    } else {
-        0
-    }
-
-    val completionNode = game.select("div.trophy-count div span")
-
-    val gold = completionNode[1].text()
-    val silver = completionNode[3].text()
-    val bronze = completionNode[5].text()
-    val completionPercent = completionNode[6].text().replace("%", "")
-
-    val earnedTrophies = game.select("div.small-info b")[0].text()
-    val gameTotalTrophies = if (game.select("div.small-info")[0].text().startsWith("All")) {
-        earnedTrophies
-    } else {
-        game.select("div.small-info b")[1].text()
-    }
-
-    return Game(
-        name = name,
-        coverURL = URL(coverURL),
-        platform = platform,
-        platinum = platinum,
-        id = psnProfilesId,
-        gold = gold.toIntOrZero(),
-        silver = silver.toIntOrZero(),
-        bronze = bronze.toIntOrZero(),
-        completionPercent = completionPercent.toDoubleOrZero(),
-        earnedTrophies = earnedTrophies.toIntOrZero(),
-        totalTrophies = gameTotalTrophies.toIntOrZero(),
-        playerPsnId = psnId
-    )
 }
 
 private fun String.toIntOrZero() =
