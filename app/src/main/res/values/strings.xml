@@ -16,4 +16,8 @@
     <string name="silver">Silver</string>
     <string name="bronze">Bronze</string>
     <string name="default_user_hint">PSN ID</string>
+    <string name="game_list">Game List</string>
+    <string name="profile">Profile</string>
+    <string name="switch_psn_account">Switch PSN Account</string>
+    <string name="switch_psn_id">Switch PSN ID</string>
 </resources>
