@@ -3,7 +3,7 @@ package com.bruce32.psnprofileviewer.network
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
-import com.bruce32.psnprofileviewer.model.ProfileWithGames
+import com.bruce32.psnprofileviewer.model.ProfileAndGames
 import com.bruce32.psnprofileviewer.model.Trophy
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -11,7 +11,7 @@ import java.net.URL
 
 class PSNProfileScraperImpl : PSNProfileScraper {
 
-    override fun profileWithGames(html: String): ProfileWithGames {
+    override fun profileAndGames(html: String): ProfileAndGames {
         val doc = Jsoup.parse(html)
         val username = doc.select("span.username").text()
         val level = doc.select("li.icon-sprite.level").text()
@@ -54,7 +54,7 @@ class PSNProfileScraperImpl : PSNProfileScraper {
             countryRank = countryRank?.toIntOrZero() ?: 0
         )
 
-        return ProfileWithGames(
+        return ProfileAndGames(
             profile = profile,
             games = games
         )

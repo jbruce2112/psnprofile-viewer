@@ -12,7 +12,7 @@ class PSNProfileServiceImpl(
     override suspend fun profileAndGames(userName: String) = withContext(Dispatchers.IO) {
         try {
             val profileHtml = psnProfileApi.profile(userName)
-            scraper.profileWithGames(html = profileHtml)
+            scraper.profileAndGames(html = profileHtml)
         } catch (e: Exception) {
             Log.e("ProfileService", "Exception fetching profile and games : '${e.message}'")
             null

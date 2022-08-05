@@ -4,7 +4,7 @@ import android.util.Log
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
-import com.bruce32.psnprofileviewer.model.ProfileWithGames
+import com.bruce32.psnprofileviewer.model.ProfileAndGames
 import com.bruce32.psnprofileviewer.model.Trophy
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -28,7 +28,7 @@ class PSNProfileServiceTest {
     @Before
     fun setup() {
         mockScraper = mockk {
-            every { profileWithGames(any()) } returns mockk()
+            every { profileAndGames(any()) } returns mockk()
             every { gameDetails(any(), any(), any()) } returns mockk()
         }
         mockPSNProfileAPI = mockk {
@@ -55,16 +55,16 @@ class PSNProfileServiceTest {
     fun `profileAndGames calls scraper with response from api`() {
         coEvery { mockPSNProfileAPI.profile(any()) } returns "someHTMLString"
         runBlocking { service.profileAndGames("") }
-        coVerify(exactly=1) { mockScraper.profileWithGames("someHTMLString") }
+        coVerify(exactly=1) { mockScraper.profileAndGames("someHTMLString") }
     }
 
     @Test
     fun `profileAndGames returns response from scraper`() {
-        val fakeScraperResponse = ProfileWithGames(
+        val fakeScraperResponse = ProfileAndGames(
             profile = fakeProfile("fetchedPsnId"),
             games = listOf(fakeGame("fetchedGameId"))
         )
-        coEvery { mockScraper.profileWithGames("") } returns fakeScraperResponse
+        coEvery { mockScraper.profileAndGames("") } returns fakeScraperResponse
         val serviceResponse = runBlocking { service.profileAndGames("") }
 
         assertEquals(serviceResponse, fakeScraperResponse)
@@ -80,7 +80,7 @@ class PSNProfileServiceTest {
 
     @Test
     fun `profileAndGames returns null when scraper throws`() {
-        coEvery { mockScraper.profileWithGames(any()) } throws RuntimeException("whoops")
+        coEvery { mockScraper.profileAndGames(any()) } throws RuntimeException("whoops")
         val serviceResponse = runBlocking { service.profileAndGames("") }
 
         assertNull(serviceResponse)

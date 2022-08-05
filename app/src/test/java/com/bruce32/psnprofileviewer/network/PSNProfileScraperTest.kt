@@ -22,8 +22,8 @@ class PSNProfileScraperTest {
     }
 
     @Test
-    fun `profileWithGames returns 70 games total from game list html`() {
-        val result = scraper.profileWithGames(gameListHtml)
+    fun `profileAndGames returns 70 games total from game list html`() {
+        val result = scraper.profileAndGames(gameListHtml)
         assertEquals(70, result.games.size)
     }
 

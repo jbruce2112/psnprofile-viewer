@@ -1,9 +1,7 @@
 package com.bruce32.psnprofileviewer.model
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import java.net.URL
 
 @Entity
@@ -22,11 +20,3 @@ data class Game(
     val playerPsnId: String
 )
 
-data class ProfileWithGames(
-    @Embedded val profile: Profile,
-    @Relation(
-        parentColumn = "psnId",
-        entityColumn = "playerPsnId"
-    )
-    val games: List<Game>
-)

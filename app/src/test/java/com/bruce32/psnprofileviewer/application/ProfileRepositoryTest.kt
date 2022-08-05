@@ -7,7 +7,7 @@ import com.bruce32.psnprofileviewer.model.CurrentUser
 import com.bruce32.psnprofileviewer.model.Game
 import com.bruce32.psnprofileviewer.model.GameDetails
 import com.bruce32.psnprofileviewer.model.Profile
-import com.bruce32.psnprofileviewer.model.ProfileWithGames
+import com.bruce32.psnprofileviewer.model.ProfileAndGames
 import com.bruce32.psnprofileviewer.model.Trophy
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -55,7 +55,7 @@ class ProfileRepositoryTest {
         }
 
         mockService = mockk {
-            coEvery { profileAndGames(any()) } returns ProfileWithGames(fakeProfile(), emptyList())
+            coEvery { profileAndGames(any()) } returns ProfileAndGames(fakeProfile(), emptyList())
             coEvery { gameDetails(any(), any()) } returns GameDetails(emptyList())
         }
 
@@ -145,7 +145,7 @@ class ProfileRepositoryTest {
         } returns flowOf(CurrentUser("somePsnId"))
         coEvery {
             mockService.profileAndGames("somePsnId")
-        } returns ProfileWithGames(fakeProfile(psnId = "somePsnIdFromService"), emptyList())
+        } returns ProfileAndGames(fakeProfile(psnId = "somePsnIdFromService"), emptyList())
 
         runBlocking { repository.refreshProfileAndGames() }
 
@@ -168,7 +168,7 @@ class ProfileRepositoryTest {
         )
         coEvery {
             mockService.profileAndGames("somePsnId")
-        } returns ProfileWithGames(fakeProfile(), fakeGames)
+        } returns ProfileAndGames(fakeProfile(), fakeGames)
 
         runBlocking { repository.refreshProfileAndGames() }
 
