@@ -52,7 +52,7 @@ class ProfileFragment(
         )
 
         binding.headingView.text = viewModel.heading
-        binding.subheadingView.text = viewModel.subheading
+        binding.subheadingView.text = viewModel.subheading.getString(requireContext())
 
         val linearLayout = binding.statsLayout
         linearLayout.removeAllViews()

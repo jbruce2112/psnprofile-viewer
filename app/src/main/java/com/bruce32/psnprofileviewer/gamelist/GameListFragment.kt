@@ -13,15 +13,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.common.StringResource
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import kotlinx.coroutines.launch
 
 class GameListFragment(
-    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySource()
+    private val viewModelFactory: GameListViewModelFactory = GameListViewModelFactory()
 ): Fragment() {
 
     private val viewModel: GameListViewModel by viewModels {
-        viewModelFactorySource.factory(requireContext())
+        viewModelFactory
     }
 
     private var _binding: FragmentGameListBinding? = null
@@ -67,8 +68,8 @@ class GameListFragment(
         }
     }
 
-    private fun setMessageAndHideRecyclerView(message: String) {
-        binding.messageView.text = message
+    private fun setMessageAndHideRecyclerView(message: StringResource?) {
+        binding.messageView.text = message?.getString(requireContext())
         binding.listRecyclerView.visibility = View.GONE
         binding.messageView.visibility = View.VISIBLE
     }

@@ -1,8 +1,12 @@
 package com.bruce32.psnprofileviewer.gamelist
 
 import android.util.Log
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.MainCoroutineRule
 import com.bruce32.psnprofileviewer.application.ProfileRepository
+import com.bruce32.psnprofileviewer.common.ResourceStringSource
+import com.bruce32.psnprofileviewer.common.ResourceStringSourceImpl
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.model.CurrentUser
 import com.bruce32.psnprofileviewer.model.Game
@@ -20,8 +24,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.net.URL
 
+@RunWith(AndroidJUnit4::class)
 class GameListViewModelTest {
 
     private lateinit var mockCurrentUserFlow: MutableStateFlow<CurrentUser?>
@@ -29,6 +35,7 @@ class GameListViewModelTest {
 
     private lateinit var mockRepository: ProfileRepository
     private lateinit var mockPersistence: ProfilePersistence
+    private lateinit var stringSource: ResourceStringSource
 
     private lateinit var viewModel: GameListViewModel
 
@@ -47,13 +54,15 @@ class GameListViewModelTest {
         mockPersistence = mockk {
             every { getCurrentUser() } returns mockCurrentUserFlow.asStateFlow()
         }
+        stringSource = ResourceStringSourceImpl(ApplicationProvider.getApplicationContext())
 
         mockkStatic(Log::class)
         every { Log.d(any(), any()) } returns 0
 
         viewModel = GameListViewModel(
             repository = mockRepository,
-            persistence = mockPersistence
+            persistence = mockPersistence,
+            stringSource = stringSource
         )
     }
 
