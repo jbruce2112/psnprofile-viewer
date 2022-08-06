@@ -8,6 +8,7 @@ import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.common.ResourceStringSource
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
 import com.bruce32.psnprofileviewer.model.Game
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,7 @@ class GameListViewModel(
     private val stringSource: ResourceStringSource
 ) : ViewModel() {
 
-    private val _games: MutableStateFlow<GameListUpdate> = MutableStateFlow(GameListUpdate.Empty(""))
+    private val _games: MutableStateFlow<GameListUpdate> = MutableStateFlow(GameListUpdate.Loading)
     val items: StateFlow<GameListUpdate>
         get() = _games.asStateFlow()
 

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,11 +71,11 @@ class TrophyListViewModelTest {
                 )
             )
         }
-        val itemViewModels = runBlocking { viewModel.trophies.first() }
-        assertEquals(3, itemViewModels.size)
-        assertEquals("trophy1", itemViewModels[0].title)
-        assertEquals("trophy2", itemViewModels[1].title)
-        assertEquals("trophy3", itemViewModels[2].title)
+        val update = runBlocking { viewModel.trophies.first() } as TrophyListUpdate.Items
+        assertEquals(3, update.viewModels.size)
+        assertEquals("trophy1", update.viewModels[0].title)
+        assertEquals("trophy2", update.viewModels[1].title)
+        assertEquals("trophy3", update.viewModels[2].title)
     }
 
     @Test
@@ -86,6 +87,16 @@ class TrophyListViewModelTest {
             gameId = "someGameId"
         )
         assertEquals("someGameId", gameIdSlot.captured)
+    }
+
+    @Test
+    fun `initial state is loading`() {
+        val viewModel = TrophyListViewModel(
+            repository = mockRepository,
+            gameId = "someGameId"
+        )
+        val initialState = runBlocking { viewModel.trophies.first() }
+        assertTrue(initialState is TrophyListUpdate.Loading)
     }
 }
 

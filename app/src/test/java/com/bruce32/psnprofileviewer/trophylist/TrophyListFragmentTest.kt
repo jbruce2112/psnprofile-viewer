@@ -6,6 +6,11 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.R
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
@@ -28,7 +33,7 @@ import java.net.URL
 @RunWith(AndroidJUnit4::class)
 class TrophyListFragmentTest {
 
-    private lateinit var mockTrophiesFlow: MutableStateFlow<List<TrophyViewModel>>
+    private lateinit var mockTrophiesFlow: MutableStateFlow<TrophyListUpdate>
 
     private lateinit var mockViewModel: TrophyListViewModel
     private lateinit var spyAdapter: ListItemAdapter
@@ -37,7 +42,7 @@ class TrophyListFragmentTest {
 
     @Before
     fun setup() {
-        mockTrophiesFlow = MutableStateFlow(emptyList())
+        mockTrophiesFlow = MutableStateFlow(TrophyListUpdate.Loading)
         mockViewModel = mockk {
             every { trophies } returns mockTrophiesFlow.asStateFlow()
         }
@@ -67,15 +72,14 @@ class TrophyListFragmentTest {
     }
 
     @Test
-    fun `submitList is called on recyclerView's ListItemAdapter adapter with result from viewModel`() {
-        runBlocking { mockTrophiesFlow.emit(emptyList()) }
+    fun `submitList is called on recyclerView's ListItemAdapter adapter when viewModel returns Items update`() {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         val viewModelsSlot = slot<List<ListItemViewModel>>()
         every { spyAdapter.submitList(capture(viewModelsSlot)) } returns Unit
 
         val oneViewModel = listOf(TrophyViewModel(fakeTrophy("someTrophy")))
-        runBlocking { mockTrophiesFlow.emit(oneViewModel) }
+        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Items(oneViewModel)) }
 
         assertEquals(oneViewModel, viewModelsSlot.captured)
     }
@@ -87,6 +91,38 @@ class TrophyListFragmentTest {
             val layoutManager = fragment.view?.findViewById<RecyclerView>(R.id.list_recycler_view)?.layoutManager
             assert(layoutManager is LinearLayoutManager)
         }
+    }
+
+    @Test
+    fun `recyclerView is set to GONE when update is emitted of type Loading`() {
+        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Loading) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `recyclerView is set to VISIBLE when update is emitted of type Items`() {
+        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun `progressBar is set to GONE when update is emitted of type Items`() {
+        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `progressBar is set to VISIBLE when update is emitted of type LOADING`() {
+        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Loading) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 }
 
