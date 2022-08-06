@@ -14,7 +14,7 @@ class ProfileStatItemView(
     var viewModel: ProfileStatViewModel? = null
         set(value) {
             findViewById<TextView>(R.id.statValue).text = value?.value
-            findViewById<TextView>(R.id.statLabel).text = value?.label?.getString(context)
+            findViewById<TextView>(R.id.statLabel).text = value?.label
             field = value
         }
 

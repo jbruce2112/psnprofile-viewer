@@ -54,7 +54,7 @@ class SwitchAccountFragment(
 
     private suspend fun observeUserFieldHintTextChanges() {
         viewModel.userFieldHint.collect {
-            binding.setPsnIdText.hint = it?.getString(requireContext())
+            binding.setPsnIdText.hint = it
         }
     }
 
