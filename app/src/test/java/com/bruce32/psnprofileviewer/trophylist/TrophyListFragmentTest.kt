@@ -9,12 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.R
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSource
+import com.bruce32.psnprofileviewer.common.ListItemViewModel
 import com.bruce32.psnprofileviewer.model.Trophy
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.spyk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +29,9 @@ import java.net.URL
 class TrophyListFragmentTest {
 
     private lateinit var mockTrophiesFlow: MutableStateFlow<List<TrophyViewModel>>
+
     private lateinit var mockViewModel: TrophyListViewModel
+    private lateinit var spyAdapter: ListItemAdapter
 
     private lateinit var scenario: FragmentScenario<TrophyListFragment>
 
@@ -35,10 +42,15 @@ class TrophyListFragmentTest {
             every { trophies } returns mockTrophiesFlow.asStateFlow()
         }
 
+        spyAdapter = spyk()
+        val spyAdapterSource = mockk<ListItemAdapterSource> {
+            every { adapter(any()) } returns spyAdapter
+        }
+
         val mockFactory: TrophyListViewModelFactory = mockk {
             every { create<TrophyListViewModel>(any(), any()) } returns mockViewModel
         }
-        val mockFactoryProvider: TrophyListViewModelFactorySource = mockk {
+        val mockFactorySource: TrophyListViewModelFactorySource = mockk {
             every { factory("someGameId") } returns mockFactory
         }
         val args = Bundle()
@@ -47,25 +59,25 @@ class TrophyListFragmentTest {
             fragmentArgs = args,
             initialState = Lifecycle.State.CREATED
         ) {
-            TrophyListFragment(mockFactoryProvider)
+            TrophyListFragment(
+                viewModelFactorySource = mockFactorySource,
+                adapterSource = spyAdapterSource
+            )
         }
     }
 
     @Test
-    fun `update is called on recyclerView's ListItemAdapter adapter with result from update`() {
+    fun `submitList is called on recyclerView's ListItemAdapter adapter with result from viewModel`() {
         runBlocking { mockTrophiesFlow.emit(emptyList()) }
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment { fragment ->
-            val adapter = fragment.view?.findViewById<RecyclerView>(R.id.list_recycler_view)?.adapter as? ListItemAdapter
 
-            val itemsBeforeUpdate = adapter?.itemCount
-            val oneViewModel = listOf(TrophyViewModel(fakeTrophy("someTrophy")))
-            runBlocking { mockTrophiesFlow.emit(oneViewModel) }
-            val itemsAfterUpdate = adapter?.itemCount
+        val viewModelsSlot = slot<List<ListItemViewModel>>()
+        every { spyAdapter.submitList(capture(viewModelsSlot)) } returns Unit
 
-            assert(itemsBeforeUpdate == 0)
-            assert(itemsAfterUpdate == 1)
-        }
+        val oneViewModel = listOf(TrophyViewModel(fakeTrophy("someTrophy")))
+        runBlocking { mockTrophiesFlow.emit(oneViewModel) }
+
+        assertEquals(oneViewModel, viewModelsSlot.captured)
     }
 
     @Test

@@ -14,11 +14,16 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.R
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSource
+import com.bruce32.psnprofileviewer.common.ListItemViewModel
 import com.bruce32.psnprofileviewer.model.Game
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.spyk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,6 +35,8 @@ class GameListFragmentTest {
     private lateinit var mockItemsFlow: MutableStateFlow<GameListUpdate>
     private lateinit var mockViewModel: GameListViewModel
 
+    private lateinit var spyAdapter: ListItemAdapter
+
     private lateinit var scenario: FragmentScenario<GameListFragment>
 
     @Before
@@ -39,6 +46,11 @@ class GameListFragmentTest {
             every { items } returns mockItemsFlow
         }
 
+        spyAdapter = spyk()
+        val spyAdapterSource = mockk<ListItemAdapterSource> {
+            every { adapter(any()) } returns spyAdapter
+        }
+
         val mockFactory: GameListViewModelFactory = mockk {
             every { create<GameListViewModel>(any(), any()) } returns mockViewModel
         }
@@ -46,7 +58,10 @@ class GameListFragmentTest {
             every { factory(any()) } returns mockFactory
         }
         scenario = launchFragmentInContainer(initialState = Lifecycle.State.CREATED) {
-            GameListFragment(mockFactorySource)
+            GameListFragment(
+                viewModelFactorySource = mockFactorySource,
+                adapterSource = spyAdapterSource
+            )
         }
     }
 
@@ -91,20 +106,17 @@ class GameListFragmentTest {
     }
 
     @Test
-    fun `update is called on recyclerView's ListItemAdapter adapter with result from update of type Items`() {
+    fun `submitList is called on recyclerView's ListItemAdapter adapter with result from update of type Items`() {
         runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment { fragment ->
-            val adapter = fragment.view?.findViewById<RecyclerView>(R.id.list_recycler_view)?.adapter as? ListItemAdapter
 
-            val itemsBeforeUpdate = adapter?.itemCount
-            val oneViewModel = listOf(GameViewModel(fakeGame("someGame")))
-            runBlocking { mockItemsFlow.emit(GameListUpdate.Items(oneViewModel)) }
-            val itemsAfterUpdate = adapter?.itemCount
+        val viewModelsSlot = slot<List<ListItemViewModel>>()
+        every { spyAdapter.submitList(capture(viewModelsSlot)) } returns Unit
 
-            assert(itemsBeforeUpdate == 0)
-            assert(itemsAfterUpdate == 1)
-        }
+        val oneViewModel = listOf(GameViewModel(fakeGame("someGame")))
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Items(oneViewModel)) }
+
+        assertEquals(oneViewModel, viewModelsSlot.captured)
     }
 
     @Test

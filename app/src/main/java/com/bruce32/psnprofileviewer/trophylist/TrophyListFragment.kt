@@ -10,17 +10,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSource
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSourceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
 class TrophyListFragment(
-    private val viewModelFactoryProvider: TrophyListViewModelFactorySource = TrophyListViewModelFactorySourceImpl()
+    private val viewModelFactorySource: TrophyListViewModelFactorySource = TrophyListViewModelFactorySourceImpl(),
+    adapterSource: ListItemAdapterSource = ListItemAdapterSourceImpl()
 ) : Fragment() {
 
     private val args: TrophyListFragmentArgs by navArgs()
     private val viewModel: TrophyListViewModel by viewModels {
-        viewModelFactoryProvider.factory(args.gameId)
+        viewModelFactorySource.factory(args.gameId)
     }
 
     private var _binding: FragmentTrophyListBinding? = null
@@ -29,7 +31,7 @@ class TrophyListFragment(
             "Binding is null"
         }
 
-    private val adapter = ListItemAdapter(emptyList())
+    private val adapter = adapterSource.adapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +46,7 @@ class TrophyListFragment(
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.trophies.collect {
                 Log.d("TrophyList", "${args.gameId} updated with ${it.size} trophies")
-                adapter.update(it)
+                adapter.submitList(it)
             }
         }
 
