@@ -8,7 +8,7 @@ import java.io.FileInputStream
 import java.util.regex.Matcher
 import javax.xml.parsers.DocumentBuilderFactory
 
-class FakeResourceStringSource : ResourceStringSource {
+object FakeResourceStringSource : ResourceStringSource {
 
     private val resIdToString =
         readStringsFromXml(filename = "../app/src/main/res/values/strings.xml")

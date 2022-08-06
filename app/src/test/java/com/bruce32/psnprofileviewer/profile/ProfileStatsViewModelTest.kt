@@ -8,13 +8,11 @@ import java.net.URL
 
 class ProfileStatsViewModelTest {
 
-    private val fakeStringSource = FakeResourceStringSource()
-
     @Test
     fun `heading is psn id`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(psnId = "myPsnId"),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("myPsnId", viewModel.heading)
     }
@@ -23,7 +21,7 @@ class ProfileStatsViewModelTest {
     fun `imageURL is avatar url`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(avatarURL = URL("https://www.psnprofiles.com")),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("https://www.psnprofiles.com", viewModel.imageURL.toString())
     }
@@ -32,7 +30,7 @@ class ProfileStatsViewModelTest {
     fun `subheading is formatted trophy list`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(totalPlatinum = 22, totalGold = 4344, totalSilver = 4333, totalBronze = 224345),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("22 Platinum, 4,344 Gold, 4,333 Silver, 224,345 Bronze", viewModel.subheading)
     }
@@ -41,7 +39,7 @@ class ProfileStatsViewModelTest {
     fun `there are seven statViewModels`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals(7, viewModel.stats.size)
     }
@@ -50,7 +48,7 @@ class ProfileStatsViewModelTest {
     fun `first statViewModel is gamesPlayed`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(gamesPlayed = 55),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("55", viewModel.stats[0].value)
         assertEquals("Games Played", viewModel.stats[0].label)
@@ -60,7 +58,7 @@ class ProfileStatsViewModelTest {
     fun `second statViewModel is percentComplete`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(completionPercent = 55.42),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("55.42%", viewModel.stats[1].value)
         assertEquals("Overall Completion", viewModel.stats[1].label)
@@ -70,7 +68,7 @@ class ProfileStatsViewModelTest {
     fun `second statViewModel is percentComplete with a padded zero when trailing digit is zero`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(completionPercent = 55.4),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("55.40%", viewModel.stats[1].value)
         assertEquals("Overall Completion", viewModel.stats[1].label)
@@ -80,7 +78,7 @@ class ProfileStatsViewModelTest {
     fun `third statViewModel is completedGames`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(completedGames = 32),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("32", viewModel.stats[2].value)
         assertEquals("Completed Games", viewModel.stats[2].label)
@@ -90,7 +88,7 @@ class ProfileStatsViewModelTest {
     fun `fourth statViewModel is unearnedTrophies`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(unearnedTrophies = 14500),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("14,500", viewModel.stats[3].value)
         assertEquals("Unearned Trophies", viewModel.stats[3].label)
@@ -100,7 +98,7 @@ class ProfileStatsViewModelTest {
     fun `fifth statViewModel is worldRank`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(worldRank = 202500),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("202,500", viewModel.stats[4].value)
         assertEquals("World Rank", viewModel.stats[4].label)
@@ -110,7 +108,7 @@ class ProfileStatsViewModelTest {
     fun `sixth statViewModel is countryRank`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(countryRank = 500123),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("500,123", viewModel.stats[5].value)
         assertEquals("Country Rank", viewModel.stats[5].label)
@@ -120,7 +118,7 @@ class ProfileStatsViewModelTest {
     fun `seventh statViewModel is level`() {
         val viewModel = ProfileStatsViewModelImpl(
             profile = fakeProfile(level = 250),
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
         assertEquals("250", viewModel.stats[6].value)
         assertEquals("PSN Level", viewModel.stats[6].label)

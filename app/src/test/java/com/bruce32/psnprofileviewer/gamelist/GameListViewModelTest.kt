@@ -30,7 +30,6 @@ class GameListViewModelTest {
 
     private lateinit var mockRepository: ProfileRepository
     private lateinit var mockPersistence: ProfilePersistence
-    private val fakeStringSource = FakeResourceStringSource()
 
     private lateinit var viewModel: GameListViewModel
 
@@ -56,7 +55,7 @@ class GameListViewModelTest {
         viewModel = GameListViewModel(
             repository = mockRepository,
             persistence = mockPersistence,
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
     }
 

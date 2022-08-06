@@ -25,8 +25,8 @@ import java.net.URL
 
 class ProfileViewModelTest {
     private lateinit var mockProfileFlow: MutableStateFlow<Profile?>
+
     private lateinit var mockRepository: ProfileRepository
-    private val fakeStringSource = FakeResourceStringSource()
 
     private lateinit var viewModel: ProfileViewModel
 
@@ -47,7 +47,7 @@ class ProfileViewModelTest {
 
         viewModel = ProfileViewModel(
             repository = mockRepository,
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
     }
 

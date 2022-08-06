@@ -28,7 +28,6 @@ class SwitchAccountViewModelTest {
 
     private lateinit var mockRepository: ProfileRepository
     private lateinit var mockPersistence: ProfilePersistence
-    private val fakeStringSource = FakeResourceStringSource()
 
     private lateinit var viewModel: SwitchAccountViewModel
 
@@ -53,7 +52,7 @@ class SwitchAccountViewModelTest {
         viewModel = SwitchAccountViewModel(
             repository = mockRepository,
             persistence = mockPersistence,
-            stringSource = fakeStringSource
+            stringSource = FakeResourceStringSource
         )
     }
 
