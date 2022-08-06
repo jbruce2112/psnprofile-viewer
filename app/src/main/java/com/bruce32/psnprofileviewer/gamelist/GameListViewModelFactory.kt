@@ -1,15 +1,11 @@
 package com.bruce32.psnprofileviewer.gamelist
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
-class GameListViewModelFactorySource {
-    fun factory(context: Context) = GameListViewModelFactory(StringSource(context))
-}
+import com.bruce32.psnprofileviewer.common.ResourceStringSource
 
 class GameListViewModelFactory(
-    private val stringSource: StringSource
+    private val stringSource: ResourceStringSource
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

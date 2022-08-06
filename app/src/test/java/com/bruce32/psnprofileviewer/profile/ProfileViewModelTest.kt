@@ -1,6 +1,7 @@
 package com.bruce32.psnprofileviewer.profile
 
 import android.util.Log
+import com.bruce32.psnprofileviewer.FakeResourceStringSource
 import com.bruce32.psnprofileviewer.MainCoroutineRule
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.model.Profile
@@ -24,8 +25,8 @@ import java.net.URL
 
 class ProfileViewModelTest {
     private lateinit var mockProfileFlow: MutableStateFlow<Profile?>
-
     private lateinit var mockRepository: ProfileRepository
+    private val fakeStringSource = FakeResourceStringSource()
 
     private lateinit var viewModel: ProfileViewModel
 
@@ -45,7 +46,8 @@ class ProfileViewModelTest {
         every { Log.d(any(), any()) } returns 0
 
         viewModel = ProfileViewModel(
-            repository = mockRepository
+            repository = mockRepository,
+            stringSource = fakeStringSource
         )
     }
 

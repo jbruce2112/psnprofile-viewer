@@ -17,7 +17,7 @@ import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import kotlinx.coroutines.launch
 
 class GameListFragment(
-    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySource()
+    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySourceImpl()
 ): Fragment() {
 
     private val viewModel: GameListViewModel by viewModels {

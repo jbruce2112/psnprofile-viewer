@@ -45,8 +45,11 @@ class SwitchAccountFragmentTest {
         val mockFactory: SwitchAccountViewModelFactory = mockk {
             every { create<SwitchAccountViewModel>(any(), any()) } returns mockViewModel
         }
+        val mockFactorySource: SwitchAccountViewModelFactorySource = mockk {
+            every { factory(any()) } returns mockFactory
+        }
         scenario = launchFragmentInContainer(initialState = Lifecycle.State.CREATED) {
-            SwitchAccountFragment(mockFactory)
+            SwitchAccountFragment(mockFactorySource)
         }
     }
 

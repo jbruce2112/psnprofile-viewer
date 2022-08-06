@@ -1,6 +1,7 @@
 package com.bruce32.psnprofileviewer.switchaccount
 
 import android.util.Log
+import com.bruce32.psnprofileviewer.FakeResourceStringSource
 import com.bruce32.psnprofileviewer.MainCoroutineRule
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
@@ -27,6 +28,7 @@ class SwitchAccountViewModelTest {
 
     private lateinit var mockRepository: ProfileRepository
     private lateinit var mockPersistence: ProfilePersistence
+    private val fakeStringSource = FakeResourceStringSource()
 
     private lateinit var viewModel: SwitchAccountViewModel
 
@@ -50,7 +52,8 @@ class SwitchAccountViewModelTest {
 
         viewModel = SwitchAccountViewModel(
             repository = mockRepository,
-            persistence = mockPersistence
+            persistence = mockPersistence,
+            stringSource = fakeStringSource
         )
     }
 

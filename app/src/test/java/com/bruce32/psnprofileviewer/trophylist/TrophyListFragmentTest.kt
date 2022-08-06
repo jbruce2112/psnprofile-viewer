@@ -38,7 +38,7 @@ class TrophyListFragmentTest {
         val mockFactory: TrophyListViewModelFactory = mockk {
             every { create<TrophyListViewModel>(any(), any()) } returns mockViewModel
         }
-        val mockFactoryProvider: TrophyListViewModelFactoryProvider = mockk {
+        val mockFactoryProvider: TrophyListViewModelFactorySource = mockk {
             every { factory("someGameId") } returns mockFactory
         }
         val args = Bundle()

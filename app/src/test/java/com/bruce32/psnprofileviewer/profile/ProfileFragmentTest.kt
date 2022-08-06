@@ -53,9 +53,12 @@ class ProfileFragmentTest {
         val mockFactory: ProfileViewModelFactory = mockk {
             every { create<ProfileViewModel>(any(), any()) } returns mockViewModel
         }
+        val mockFactorySource: ProfileViewModelFactorySource = mockk {
+            every { factory(any()) } returns mockFactory
+        }
         scenario = launchFragmentInContainer(initialState = Lifecycle.State.CREATED) {
             ProfileFragment(
-                viewModelFactory = mockFactory,
+                viewModelFactorySource = mockFactorySource,
                 imageLoader = mockImageLoader
             )
         }
