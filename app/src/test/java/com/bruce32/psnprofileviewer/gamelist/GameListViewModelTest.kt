@@ -1,6 +1,7 @@
 package com.bruce32.psnprofileviewer.gamelist
 
 import android.util.Log
+import com.bruce32.psnprofileviewer.FakeResourceStringSource
 import com.bruce32.psnprofileviewer.MainCoroutineRule
 import com.bruce32.psnprofileviewer.application.ProfileRepository
 import com.bruce32.psnprofileviewer.database.ProfilePersistence
@@ -53,7 +54,8 @@ class GameListViewModelTest {
 
         viewModel = GameListViewModel(
             repository = mockRepository,
-            persistence = mockPersistence
+            persistence = mockPersistence,
+            stringSource = FakeResourceStringSource
         )
     }
 

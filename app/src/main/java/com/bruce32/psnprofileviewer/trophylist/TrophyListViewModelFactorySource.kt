@@ -1,10 +1,10 @@
 package com.bruce32.psnprofileviewer.trophylist
 
-interface TrophyListViewModelFactoryProvider {
+interface TrophyListViewModelFactorySource {
     fun factory(gameId: String): TrophyListViewModelFactory
 }
 
-class TrophyListViewModelFactoryProviderImpl : TrophyListViewModelFactoryProvider {
+class TrophyListViewModelFactorySourceImpl : TrophyListViewModelFactorySource {
    override fun factory(gameId: String) : TrophyListViewModelFactory {
        return TrophyListViewModelFactory(gameId)
    }

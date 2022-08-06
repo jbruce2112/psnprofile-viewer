@@ -15,7 +15,7 @@ import com.bruce32.psnprofileviewer.databinding.FragmentTrophyListBinding
 import kotlinx.coroutines.launch
 
 class TrophyListFragment(
-    private val viewModelFactoryProvider: TrophyListViewModelFactoryProvider = TrophyListViewModelFactoryProviderImpl()
+    private val viewModelFactoryProvider: TrophyListViewModelFactorySource = TrophyListViewModelFactorySourceImpl()
 ) : Fragment() {
 
     private val args: TrophyListFragmentArgs by navArgs()

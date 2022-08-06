@@ -13,12 +13,12 @@ import com.bruce32.psnprofileviewer.databinding.FragmentProfileBinding
 import kotlinx.coroutines.launch
 
 class ProfileFragment(
-    private val viewModelFactory: ProfileViewModelFactory = ProfileViewModelFactory(),
+    private val viewModelFactorySource: ProfileViewModelFactorySource = ProfileViewModelFactorySourceImpl(),
     private val imageLoader: ImageLoader = GlideImageLoader()
 ) : Fragment() {
 
     private val viewModel: ProfileViewModel by viewModels {
-        viewModelFactory
+        viewModelFactorySource.factory(requireContext())
     }
 
     private var _binding: FragmentProfileBinding? = null

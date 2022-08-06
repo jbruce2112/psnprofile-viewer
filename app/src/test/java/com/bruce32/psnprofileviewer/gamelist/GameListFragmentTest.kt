@@ -42,8 +42,11 @@ class GameListFragmentTest {
         val mockFactory: GameListViewModelFactory = mockk {
             every { create<GameListViewModel>(any(), any()) } returns mockViewModel
         }
+        val mockFactorySource: GameListViewModelFactorySource = mockk {
+            every { factory(any()) } returns mockFactory
+        }
         scenario = launchFragmentInContainer(initialState = Lifecycle.State.CREATED) {
-            GameListFragment(mockFactory)
+            GameListFragment(mockFactorySource)
         }
     }
 

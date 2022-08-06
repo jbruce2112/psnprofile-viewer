@@ -5,14 +5,14 @@
 
     <item
         android:id="@+id/gameListFragment"
-        android:title="Game List" />
+        android:title="@string/game_list" />
 
     <item
         android:id="@+id/profileFragment"
-        android:title="Profile" />
+        android:title="@string/profile" />
 
     <item
         android:id="@+id/switchAccountFragment"
-        android:title="Switch PSN Account" />
+        android:title="@string/switch_psn_account" />
 
 </menu>

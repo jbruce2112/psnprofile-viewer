@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toStartOf="@+id/trailing_view"
         app:layout_constraintStart_toEndOf="@+id/image_view"
         app:layout_constraintTop_toBottomOf="@+id/title_view"
-        android:text="Secondary" />
+        tools:text="Secondary" />
 
     <TextView
         android:id="@+id/description_view"

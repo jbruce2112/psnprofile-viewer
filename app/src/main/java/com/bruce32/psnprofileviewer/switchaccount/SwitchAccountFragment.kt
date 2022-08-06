@@ -13,11 +13,11 @@ import com.bruce32.psnprofileviewer.databinding.FragmentSwitchAccountBinding
 import kotlinx.coroutines.launch
 
 class SwitchAccountFragment(
-    private val viewModelFactory: SwitchAccountViewModelFactory = SwitchAccountViewModelFactory()
+    private val viewModelFactorySource: SwitchAccountViewModelFactorySource = SwitchAccountViewModelFactorySourceImpl()
 ) : Fragment() {
 
     private val viewModel: SwitchAccountViewModel by viewModels {
-        viewModelFactory
+        viewModelFactorySource.factory(requireContext())
     }
 
     private var _binding: FragmentSwitchAccountBinding? = null
