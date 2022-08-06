@@ -16,8 +16,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -96,6 +98,20 @@ class GameListViewModelTest {
         assertEquals("game1", update?.viewModels?.get(0)?.id)
         assertEquals("game2", update?.viewModels?.get(1)?.id)
         assertEquals("game3", update?.viewModels?.get(2)?.id)
+    }
+
+    @Test
+    fun `initial state is loading`() {
+        val mockRepository = mockk<ProfileRepository> {
+            every { games } returns flow { }
+        }
+        val viewModel = GameListViewModel(
+            repository = mockRepository,
+            persistence = mockPersistence,
+            stringSource = FakeResourceStringSource
+        )
+        val initialState = runBlocking { viewModel.items.first() }
+        assertTrue(initialState is GameListUpdate.Loading)
     }
 }
 

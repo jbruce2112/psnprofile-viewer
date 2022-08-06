@@ -82,6 +82,14 @@ class GameListFragmentTest {
     }
 
     @Test
+    fun `messageView is set to GONE when update is emitted of type Loading`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Loading) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.messageView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
     fun `messageView is set to VISIBLE when update is emitted of type Empty`() {
         runBlocking { mockItemsFlow.emit(GameListUpdate.Empty("")) }
         scenario.moveToState(Lifecycle.State.RESUMED)
@@ -98,11 +106,43 @@ class GameListFragmentTest {
     }
 
     @Test
+    fun `recyclerView is set to GONE when update is emitted of type Loading`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Loading) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
     fun `recyclerView is set to VISIBLE when update is emitted of type Items`() {
         runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun `progressBar is set to GONE when update is emitted of type Items`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Items(emptyList())) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `progressBar is set to GONE when update is emitted of type EMPTY`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Empty("")) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun `progressBar is set to VISIBLE when update is emitted of type LOADING`() {
+        runBlocking { mockItemsFlow.emit(GameListUpdate.Loading) }
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test

@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapterSource
@@ -44,18 +46,37 @@ class TrophyListFragment(
         binding.listRecyclerView.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.trophies.collect {
-                Log.d("TrophyList", "${args.gameId} updated with ${it.size} trophies")
-                adapter.submitList(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeViewModelUpdates()
             }
         }
-
         return binding.root
     }
 
+    private suspend fun observeViewModelUpdates() {
+        viewModel.trophies.collect {
+            when (it) {
+                is TrophyListUpdate.Loading -> showProgressBarAndHideRecyclerView()
+                is TrophyListUpdate.Items -> updateAdapterAndHideProgressBar(it.viewModels)
+            }
+        }
+    }
+
+    private fun showProgressBarAndHideRecyclerView() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.listRecyclerView.visibility = View.GONE
+    }
+
+    private fun updateAdapterAndHideProgressBar(viewModels: List<TrophyViewModel>) {
+        Log.d("TrophyList", "${args.gameId} updated with ${viewModels.size} trophies")
+        adapter.submitList(viewModels)
+        binding.listRecyclerView.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 }

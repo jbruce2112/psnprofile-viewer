@@ -64,23 +64,32 @@ class GameListFragment(
     private suspend fun observeGameViewModelUpdate() {
         viewModel.items.collect {
             when (it) {
-                is GameListUpdate.Empty -> setMessageAndHideRecyclerView(it.message)
-                is GameListUpdate.Items -> updateAdapterAndHideMessage(it.viewModels)
+                is GameListUpdate.Empty -> setMessageAndHideRecyclerViewAndProgressBar(it.message)
+                is GameListUpdate.Loading -> showProgressBarAndHideMessageAndRecyclerView()
+                is GameListUpdate.Items -> updateAdapterAndHideMessageAndProgressBar(it.viewModels)
             }
         }
     }
 
-    private fun setMessageAndHideRecyclerView(message: String) {
-        binding.messageView.text = message
+    private fun showProgressBarAndHideMessageAndRecyclerView() {
+        binding.progressBar.visibility = View.VISIBLE
         binding.listRecyclerView.visibility = View.GONE
-        binding.messageView.visibility = View.VISIBLE
+        binding.messageView.visibility = View.GONE
     }
 
-    private fun updateAdapterAndHideMessage(viewModels: List<GameViewModel>) {
+    private fun setMessageAndHideRecyclerViewAndProgressBar(message: String) {
+        binding.messageView.text = message
+        binding.messageView.visibility = View.VISIBLE
+        binding.listRecyclerView.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun updateAdapterAndHideMessageAndProgressBar(viewModels: List<GameViewModel>) {
         Log.d("GameList", "game list updated with ${viewModels.size} games")
         adapter.submitList(viewModels)
         binding.listRecyclerView.visibility = View.VISIBLE
         binding.messageView.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun onDestroyView() {

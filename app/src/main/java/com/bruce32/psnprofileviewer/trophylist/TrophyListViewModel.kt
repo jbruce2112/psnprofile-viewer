@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruce32.psnprofileviewer.application.ProfileRepository
+import com.bruce32.psnprofileviewer.model.Trophy
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,21 +17,32 @@ class TrophyListViewModel(
     private val gameId: String
 ) : ViewModel() {
 
-    private val _trophies: MutableStateFlow<List<TrophyViewModel>> = MutableStateFlow(emptyList())
-    val trophies: StateFlow<List<TrophyViewModel>>
+    private val _trophies: MutableStateFlow<TrophyListUpdate> = MutableStateFlow(TrophyListUpdate.Loading)
+    val trophies: StateFlow<TrophyListUpdate>
         get() = _trophies.asStateFlow()
+
+    private var refreshTask: Deferred<Unit>? = null
 
     init {
         Log.d("TrophyList", "initialized with gameId $gameId")
         viewModelScope.launch {
             async {
-                repository.trophies(gameId).collect { trophies ->
-                    _trophies.value = trophies.map { TrophyViewModel(it) }
+                repository.trophies(gameId).collect {
+                    _trophies.value = createUpdate(it)
                 }
             }
-            async {
+            refreshTask = async {
                 repository.refreshTrophies(gameId)
             }
         }
+    }
+
+    private fun createUpdate(trophies: List<Trophy>): TrophyListUpdate {
+        if (trophies.isEmpty() && refreshTask?.isActive == true) {
+            return TrophyListUpdate.Loading
+        }
+        return TrophyListUpdate.Items(
+            viewModels = trophies.map { TrophyViewModel(it) }
+        )
     }
 }
