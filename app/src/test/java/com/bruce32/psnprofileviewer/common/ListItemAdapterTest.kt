@@ -8,8 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bruce32.psnprofileviewer.databinding.ListItemTemplateBinding
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -49,55 +47,34 @@ class ListItemAdapterTest {
             fakeListItemViewModel(title = "title2"),
             fakeListItemViewModel(title = "title3")
         )
-        val adapter = ListItemAdapter(
-            itemViewModels = viewModels
-        )
+        val adapter = ListItemAdapter()
+        adapter.submitList(viewModels)
         adapter.onBindViewHolder(listItemHolder, 1)
 
         assertEquals("title2", binding.titleView.text)
     }
 
     @Test
-    fun `getItemCount() returns size of initial viewModels`() {
-        val threeViewModels = listOf(
-            fakeListItemViewModel(),
-            fakeListItemViewModel(),
-            fakeListItemViewModel()
+    fun `onBindViewHolder passes onClick lambda to holder's bind for index`() {
+        val viewModels = listOf(
+            fakeListItemViewModel(title = "title1"),
+            fakeListItemViewModel(title = "title2"),
+            fakeListItemViewModel(title = "title3")
         )
-        val adapter = ListItemAdapter(
-            itemViewModels = threeViewModels
-        )
+        var didCallOnClick = false
+        val adapter = ListItemAdapter {
+            didCallOnClick = true
+        }
+        adapter.submitList(viewModels)
 
-        assertEquals(3, adapter.itemCount)
-    }
+        var mockItemHolder = mockk<ListItemHolder> {
+            every { bind(any(), captureLambda()) } answers {
+                lambda<(String) -> Unit>().captured.invoke("")
+            }
+        }
+        adapter.onBindViewHolder(mockItemHolder, 2)
 
-    @Test
-    fun `getItemCount() returns size of viewModels after update`() {
-        val threeViewModels = listOf(
-            fakeListItemViewModel(),
-            fakeListItemViewModel(),
-            fakeListItemViewModel()
-        )
-        val adapter = ListItemAdapter(
-            itemViewModels = threeViewModels
-        )
-
-        adapter.update(listOf(fakeListItemViewModel()))
-
-        assertEquals(1, adapter.itemCount)
-    }
-
-    @Test
-    fun `notifyDataSetChanged is called after update`() {
-        val spyAdapter = spyk(ListItemAdapter(
-            itemViewModels = emptyList()
-        ))
-
-        verify(exactly=0) { spyAdapter.notifyDataSetChanged() }
-
-        spyAdapter.update(listOf(fakeListItemViewModel()))
-
-        verify(exactly=1) { spyAdapter.notifyDataSetChanged() }
+        assertEquals(true, didCallOnClick)
     }
 }
 

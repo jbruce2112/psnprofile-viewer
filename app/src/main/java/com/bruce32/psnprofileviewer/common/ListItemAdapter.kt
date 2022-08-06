@@ -2,13 +2,12 @@ package com.bruce32.psnprofileviewer.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.bruce32.psnprofileviewer.databinding.ListItemTemplateBinding
 
 class ListItemAdapter(
-    private var itemViewModels: List<ListItemViewModel>,
     private val onClick: ((itemId: String) -> Unit)? = null
-) : RecyclerView.Adapter<ListItemHolder>() {
+) : ListAdapter<ListItemViewModel, ListItemHolder>(ListItemViewModelDiffer()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -17,14 +16,7 @@ class ListItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ListItemHolder, position: Int) {
-        val viewModel = itemViewModels[position]
+        val viewModel = getItem(position)
         holder.bind(viewModel, onClick)
-    }
-
-    override fun getItemCount() = itemViewModels.size
-
-    fun update(listItemViewModels: List<ListItemViewModel>) {
-        this.itemViewModels = listItemViewModels
-        notifyDataSetChanged()
     }
 }

@@ -13,11 +13,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bruce32.psnprofileviewer.common.ListItemAdapter
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSource
+import com.bruce32.psnprofileviewer.common.ListItemAdapterSourceImpl
 import com.bruce32.psnprofileviewer.databinding.FragmentGameListBinding
 import kotlinx.coroutines.launch
 
 class GameListFragment(
-    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySourceImpl()
+    private val viewModelFactorySource: GameListViewModelFactorySource = GameListViewModelFactorySourceImpl(),
+    private val adapterSource: ListItemAdapterSource = ListItemAdapterSourceImpl()
 ): Fragment() {
 
     private val viewModel: GameListViewModel by viewModels {
@@ -39,7 +42,7 @@ class GameListFragment(
     ): View? {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = ListItemAdapter(emptyList()) { gameId ->
+        adapter = adapterSource.adapter { gameId ->
             findNavController().navigate(
                 GameListFragmentDirections.showTrophyList(gameId)
             )
@@ -75,7 +78,7 @@ class GameListFragment(
 
     private fun updateAdapterAndHideMessage(viewModels: List<GameViewModel>) {
         Log.d("GameList", "game list updated with ${viewModels.size} games")
-        adapter.update(viewModels)
+        adapter.submitList(viewModels)
         binding.listRecyclerView.visibility = View.VISIBLE
         binding.messageView.visibility = View.GONE
     }
