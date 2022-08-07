@@ -2,7 +2,7 @@ package com.bruce32.psnprofileviewer.common
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bruce32.psnprofileviewer.databinding.ListItemTemplateBinding
-import com.google.android.material.R.color.material_dynamic_secondary0
+import com.google.android.material.R
 
 class ListItemHolder(
     private val binding: ListItemTemplateBinding,
@@ -15,11 +15,7 @@ class ListItemHolder(
         binding.descriptionView.text = viewModel.description
         binding.trailingView.text = viewModel.trailingText
 
-        if (viewModel.highlighted) {
-            binding.root.setBackgroundColor(material_dynamic_secondary0)
-        } else {
-            binding.root.setBackgroundColor(android.R.color.transparent)
-        }
+        binding.root.setBackgroundColor(backgroundColor(viewModel.highlighted))
 
         imageLoader.load(
             url = viewModel.leadingIconURL,
@@ -30,6 +26,14 @@ class ListItemHolder(
             binding.root.setOnClickListener {
                 onClick?.invoke(viewModelId)
             }
+        }
+    }
+
+    private fun backgroundColor(highlighted: Boolean): Int {
+        return if (highlighted) {
+            R.color.material_dynamic_secondary0
+        } else {
+            android.R.color.transparent
         }
     }
 }
