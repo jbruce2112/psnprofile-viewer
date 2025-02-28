@@ -48,7 +48,7 @@ dependencies {
 
     def coroutines = '1.6.3'
     def navigation = '2.5.1'
-    def room = '2.4.3'
+    def room = '2.6.1'
     def fragment = '1.5.1'
     def glide = '4.13.2'
     def retrofit = '2.9.0'
