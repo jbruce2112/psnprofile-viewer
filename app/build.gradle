@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    namespace 'com.bruce32.psnprofileviewer'
     compileSdk 35
 
     defaultConfig {
