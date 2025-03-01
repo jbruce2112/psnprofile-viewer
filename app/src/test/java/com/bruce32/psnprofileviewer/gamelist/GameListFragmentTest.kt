@@ -52,7 +52,7 @@ class GameListFragmentTest {
         }
 
         val mockFactory: GameListViewModelFactory = mockk {
-            every { create<GameListViewModel>(any(), any()) } returns mockViewModel
+            every { create<GameListViewModel>(any()) } returns mockViewModel
         }
         val mockFactorySource: GameListViewModelFactorySource = mockk {
             every { factory(any()) } returns mockFactory

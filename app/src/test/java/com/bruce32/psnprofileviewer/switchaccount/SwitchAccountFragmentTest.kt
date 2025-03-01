@@ -43,7 +43,7 @@ class SwitchAccountFragmentTest {
         }
 
         val mockFactory: SwitchAccountViewModelFactory = mockk {
-            every { create<SwitchAccountViewModel>(any(), any()) } returns mockViewModel
+            every { create<SwitchAccountViewModel>(any()) } returns mockViewModel
         }
         val mockFactorySource: SwitchAccountViewModelFactorySource = mockk {
             every { factory(any()) } returns mockFactory

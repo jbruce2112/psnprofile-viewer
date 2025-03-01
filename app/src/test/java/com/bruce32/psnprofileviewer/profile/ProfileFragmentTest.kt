@@ -51,7 +51,7 @@ class ProfileFragmentTest {
             every { load(any(), any()) } returns Unit
         }
         val mockFactory: ProfileViewModelFactory = mockk {
-            every { create<ProfileViewModel>(any(), any()) } returns mockViewModel
+            every { create<ProfileViewModel>(any()) } returns mockViewModel
         }
         val mockFactorySource: ProfileViewModelFactorySource = mockk {
             every { factory(any()) } returns mockFactory

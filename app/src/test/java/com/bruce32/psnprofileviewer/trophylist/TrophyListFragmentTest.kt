@@ -24,6 +24,7 @@ import io.mockk.spyk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -53,7 +54,7 @@ class TrophyListFragmentTest {
         }
 
         val mockFactory: TrophyListViewModelFactory = mockk {
-            every { create<TrophyListViewModel>(any(), any()) } returns mockViewModel
+            every { create(eq(TrophyListViewModel::class.java), any()) } returns mockViewModel
         }
         val mockFactorySource: TrophyListViewModelFactorySource = mockk {
             every { factory("someGameId") } returns mockFactory
@@ -94,8 +95,8 @@ class TrophyListFragmentTest {
     }
 
     @Test
-    fun `recyclerView is set to GONE when update is emitted of type Loading`() {
-        runBlocking { mockTrophiesFlow.emit(TrophyListUpdate.Loading) }
+    fun `recyclerView is set to GONE when update is emitted of type Loading`() = runTest {
+        mockTrophiesFlow.emit(TrophyListUpdate.Loading)
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.list_recycler_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
