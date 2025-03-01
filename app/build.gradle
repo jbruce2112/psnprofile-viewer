@@ -46,7 +46,7 @@ android {
 
 dependencies {
 
-    def coroutines = '1.6.3'
+    def coroutines = '1.7.3'
     def navigation = '2.5.1'
     def room = '2.6.1'
     def fragment = '1.5.1'
@@ -56,7 +56,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     implementation 'org.jsoup:jsoup:1.15.2'
