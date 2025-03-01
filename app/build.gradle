@@ -81,7 +81,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.12.5"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
-    testImplementation "org.robolectric:robolectric:4.8.1"
+    testImplementation "org.robolectric:robolectric:4.14.1"
     testImplementation "androidx.test.ext:junit:$junit_androidx"
     testImplementation "androidx.test.espresso:espresso-core:$espresso"
     testImplementation "org.apache.commons:commons-text:1.6"
